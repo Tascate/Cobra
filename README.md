@@ -13,19 +13,21 @@
 - Tie when both players are facing each other
 - Time Counter
 ### FieldObject.java abstract
+#### Variables
 - Color
 - Direction (Angle)
+#### Methods
 - Return color / direction
 ### Trail.java extends FieldObject.java
 - Int Varaible declaring whether its Player 1 or 2
 - Return owner
 ### Character.java extends FieldObject.java
-Variables
+####Variables
 - Direction (Abstract)
 - Color (Abstract)
 - Alive
 - Speed
-Methods
+#### Methods
 - Leaves trailing light behind
 - Specials/Item Interactions (WIP, Implemented later)
 ### Player.java extends Character.java
