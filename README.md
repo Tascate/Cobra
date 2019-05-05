@@ -21,16 +21,14 @@
 - Int Varaible declaring whether its Player 1 or 2
 - Return owner
 ## Character.java extends FieldObject.java
-### Variables
 - Direction (Abstract)
 - Color (Abstract)
 - Alive
 - Speed
-### Methods
 - Leaves trailing light behind
-- Specials/Item Interactions (WIP, Implemented later)
+- Specials/Item Interactions (WIP Implemented later)
 ## Player.java extends Character.java
 - Processes input & Changes Direction
 ## AI.java extends Character.java
-- AI that controls Player’s Opponent
+- AI that controls Player’s Opponent (Implemented Later)
 - Changes Direction of its own accord
