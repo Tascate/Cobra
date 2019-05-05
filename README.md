@@ -1,6 +1,5 @@
-# Cobra Game Code
-## Project Plan Overview:
-### Cobra.java
+# Code Overview:
+## Cobra.java
 - Grid Instance that Objects are moving along
 - FieldObject Two-Dimensional Array
 - Contains either a Trail or Character
@@ -12,26 +11,26 @@
 - Sends Input to Player Changing Direction
 - Tie when both players are facing each other
 - Time Counter
-### FieldObject.java abstract
-#### Variables
+## FieldObject.java abstract
+### Variables
 - Color
 - Direction (Angle)
-#### Methods
+### Methods
 - Return color / direction
-### Trail.java extends FieldObject.java
+## Trail.java extends FieldObject.java
 - Int Varaible declaring whether its Player 1 or 2
 - Return owner
-### Character.java extends FieldObject.java
+## Character.java extends FieldObject.java
 ####Variables
 - Direction (Abstract)
 - Color (Abstract)
 - Alive
 - Speed
-#### Methods
+### Methods
 - Leaves trailing light behind
 - Specials/Item Interactions (WIP, Implemented later)
-### Player.java extends Character.java
+## Player.java extends Character.java
 - Processes input & Changes Direction
-### AI.java extends Character.java
+## AI.java extends Character.java
 - AI that controls Player’s Opponent
 - Changes Direction of its own accord
