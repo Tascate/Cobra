@@ -21,7 +21,7 @@
 - Int Varaible declaring whether its Player 1 or 2
 - Return owner
 ## Character.java extends FieldObject.java
-####Variables
+### Variables
 - Direction (Abstract)
 - Color (Abstract)
 - Alive
