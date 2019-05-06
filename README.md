@@ -13,7 +13,6 @@
 - Sends Input to Player Changing Direction
 - Tie when both players are facing each other
 - Time Counter
-## Render and Pace the Game
 ## FieldObject.java abstract
 - Color
 - Direction (Angle)
