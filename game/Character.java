@@ -18,4 +18,12 @@ public class Character extends FieldObject {
 	public void die() {
 		alive = false;
 	}
+	
+	public int returnSpeed() {
+		return speed;
+	}
+	
+	public boolean returnLifeStatus() {
+		return alive;
+	}
 }
