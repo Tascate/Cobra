@@ -12,10 +12,8 @@
 - Tie when both players are facing each other
 - Time Counter
 ## FieldObject.java abstract
-### Variables
 - Color
 - Direction (Angle)
-### Methods
 - Return color / direction
 ## Trail.java extends FieldObject.java
 - Int Varaible declaring whether its Player 1 or 2
