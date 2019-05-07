@@ -1,3 +1,11 @@
+# To-Do Probably
+- Clean up the Code
+- Clean up calcHorizontal & calcVertical
+- Move Character's Row and Column into FieldObject?
+- Control the Second Character
+- Render the Grid
+- Properly end the game (End Screen, stop progressGame())
+
 # Code Overview:
 ## Cobra.java
 - RENDER THE GAME
