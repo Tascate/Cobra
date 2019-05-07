@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+/**
+*Class that calls the methods to run the Cobra game. 
+*Extends the ApplicationAdapter class.
+*/
 public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
