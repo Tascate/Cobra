@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 
+/**
+ * Game class to run the game.
+ */
 public class Game {
 	FieldObject[][] grid;
 	Character char1;
@@ -13,6 +16,13 @@ public class Game {
 	Boolean paused;
 	Boolean ended;
 	
+	/**
+	 * Game constructor to create the game with the rows and columns, which is the grid of the game. It
+	 * also sets paused and ended to false, indicating that the game has just started. It also creates 2 players to play
+	 * the game.
+	 * @param rows - rows of grid of game
+	 * @param cols - cols of grid of game
+	 */
 	public Game(int rows, int cols) {
 		grid = new FieldObject[rows][cols];
 		paused = false;
@@ -29,8 +39,12 @@ public class Game {
 		char2Col = 6;
 	}
 	
+	/**
+	 * Method to get the progress of the game. If the game hasn't paused or ended yet, you get the current player speed
+	 * and just continue to move the player.
+	 */
 	public void progressGame() {
-		if (!paused || ended) {
+		if (!paused || !ended) {
 			int speed = char1.getSpeed();
 			checkForInput(speed);
 			moveChar1();
