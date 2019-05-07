@@ -150,4 +150,12 @@ public class Game {
 				return 0;
 		}
 	}
+	
+	public int getChar1Row() {
+		return char1Row;
+	}
+	
+	public int getChar1Col() {
+		return char1Col;
+	}
 }
