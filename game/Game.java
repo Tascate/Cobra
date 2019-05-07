@@ -151,6 +151,10 @@ public class Game {
 		}
 	}
 	
+	public FieldObject[][] returnGrid() {
+		return grid;
+	}
+	
 	public int getChar1Row() {
 		return char1Row;
 	}
