@@ -133,8 +133,10 @@ public class Game {
 		switch (character.getAngle()) {
 			case 90:
 				return 1;
+				break;
 			case 270:
 				return -1;
+				break;
 			default:
 				return 0;
 		}
@@ -144,8 +146,10 @@ public class Game {
 		switch (character.getAngle()) {
 			case 0:
 				return 1;
+				break;
 			case 180:
 				return -1;
+				break;
 			default:
 				return 0;
 		}
