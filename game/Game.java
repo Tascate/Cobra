@@ -11,45 +11,50 @@ public class Game {
 	int char1Row, char1Col;
 	int char2Row, char2Col;
 	Boolean paused;
+	Boolean ended;
 	
 	public Game(int rows, int cols) {
 		grid = new FieldObject[rows][cols];
 		paused = false;
+		ended = false;
 		
-		char1 = new Player(5,new Color(0,0,1,1), 90);
+		char1 = new Player(1,new Color(0,0,1,1), 90);
 		grid[3][6] = char1;
 		char1Row = 3;
 		char1Col = 6;
 		
-		char2 = new Player(5,new Color(1,0,0,1), 90);
+		char2 = new Player(1,new Color(1,0,0,1), 90);
 		grid[9][6] = char2;
 		char2Row = 9;
 		char2Col = 6;
 	}
 	
 	public void progressGame() {
-		int speed = grid[char1Row][char1Col].getSpeed();
-		checkForInput(speed);
+		if (!paused || ended) {
+			int speed = char1.getSpeed();
+			checkForInput(speed);
+			moveChar1();
+		}
 	}
 	
 	private void checkForInput(int speed) {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            grid[char1Row][char1Col].setAngle(180);
+            char1.setAngle(180);
             System.out.println("Left!");
             char1Row -= speed;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            grid[char1Row][char1Col].setAngle(0);
+            char1.setAngle(0);
             System.out.println("Right!");
             char1Row += speed;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            grid[char1Row][char1Col].setAngle(90);
+            char1.setAngle(90);
             System.out.println("Up!");
             char1Col += speed;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            grid[char1Row][char1Col].setAngle(270);
+            char1.setAngle(270);
             System.out.println("Down!");
             char1Col -= speed;
         }
@@ -64,11 +69,11 @@ public class Game {
 	}
 	
 	private void endGame() {
-		
+		ended = true;
 	}
 	
 	private void moveChar1() {
-		if (collision(char1Row, char1Col)) {
+		if (!collided(char2, char1Row, char1Col)) {
 			grid[char1Row+calcHorizontal(char1)*char1.getSpeed()][char1Col+calcVertical(char1)*char1.getSpeed()] = char1;
 			for(int i = 1; i <= char1.getSpeed(); i++) {
 				grid[char1Row+calcHorizontal(char1)*i][char1Col+calcVertical(char1)*i] = char1.leaveTrail();
@@ -82,20 +87,32 @@ public class Game {
 	}
 	
 	private void moveChar2() {
-		
+		if (collided(char1, char2Row, char2Col)) {
+			grid[char1Row+calcHorizontal(char1)*char1.getSpeed()][char1Col+calcVertical(char1)*char1.getSpeed()] = char1;
+			for(int i = 1; i <= char1.getSpeed(); i++) {
+				grid[char1Row+calcHorizontal(char1)*i][char1Col+calcVertical(char1)*i] = char1.leaveTrail();
+			}
+			char1Row += calcHorizontal(char1)*char1.getSpeed();
+			char1Col += calcVertical(char1)*char1.getSpeed();
+		}
+		else {
+			endGame();
+		}
 	}
 	
-	private boolean collision(int playerRow, int playerCol) {
-		FieldObject character = grid[playerRow][playerCol];
+	private boolean collided(Character character, int playerRow, int playerCol) {
 		//check each spot the player will pass
 		//amount of spots the player will pass = the speed
 		for(int i = 1; i <= character.getSpeed(); i++) {
-			if ((playerRow+calcHorizontal(character)*i < grid.length) && (playerRow+calcVertical(character)*i) < grid[0].length &&
+			if (playerRow+calcHorizontal(character)*i < grid.length && 
+				playerRow+calcHorizontal(character)*i >= 0 &&
+				playerRow+calcVertical(character)*i < grid[0].length &&
+				playerRow+calcVertical(character)*i >= 0 &&
 				grid[playerRow+calcHorizontal(character)*i][playerCol+calcVertical(character)*i] != null) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	private int calcVertical(FieldObject character) {
