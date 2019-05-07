@@ -45,7 +45,10 @@ public abstract class FieldObject {
 	public void setAngle(int a) {
 		angle = a;
 	}
-	
+	/**
+	*Method that sets the speed of the character passed in value.
+	*@param s - speed value
+	*/
 	public void setSpeed(int s) {
 		speed = s;
 	}
