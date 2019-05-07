@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 public abstract class FieldObject {
 	protected Color light; //color of character
 	protected int angle; //angle of character, where they changed directions
+	protected int speed;
 	
 	/**
 	 * Method to return the color of the character in the game.
@@ -25,6 +26,10 @@ public abstract class FieldObject {
 		return angle;
 	}
 	
+	public int getSpeed() {
+		return speed;
+	}
+	
 	/**
 	 * Method to set the color of character to the passed in color.
 	 *@param c - color
@@ -40,6 +45,11 @@ public abstract class FieldObject {
 	public void setAngle(int a) {
 		angle = a;
 	}
+	
+	public void setSpeed(int s) {
+		speed = s;
+	}
+	
 	
 	
 	
