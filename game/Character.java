@@ -42,7 +42,7 @@ public class Character extends FieldObject {
 	}
 	
 	/**
-	 *Boolean method to return the left status of the character, whether the character is still alive or has died.
+	 *Boolean method to return the life status of the character, whether the character is still alive or has died.
 	 *@return whether the character is still alive or not(true if it is, false otherwise).
 	 */
 	public boolean returnLifeStatus() {
