@@ -7,10 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-/**
-*Class that calls the methods to run the Cobra game. 
-*Extends the ApplicationAdapter class.
-*/
 public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
@@ -19,7 +15,7 @@ public class Cobra extends ApplicationAdapter {
 	//Instantiates game
 	public void create () {
 		shapeRender = new ShapeRenderer();
-		round = new Game(20,20);
+		round = new Game(75,75);
 	}
 
 	@Override
@@ -28,10 +24,25 @@ public class Cobra extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.3f, 0.3f, 0.4f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		round.progressGame();
-		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.BLUE);
-		shapeRender.circle(100, 100, 5);
+		
+		
+		shapeRender.begin(ShapeType.Line);
+		shapeRender.setColor(Color.GRAY);
+		shapeRender.rect(100, 100, 150, 150);
 		shapeRender.end();
+		
+		shapeRender.bein(ShapeType.Filled);
+		shapeRender.setColor(Color.BLUE);
+		shapeRender.circle(100+round.getChar1Row(), 100+round.getChar1Col(), 2);
+		shapeRender.end();
+		
+		shapeRender.begin(ShapeType.Filled);
+		shapeRender.setColor(Color.LIGHTBLUE);
+		for (int i = 0; i < grid.length; i++) {
+			for(int j = 0; j <grid[i].length; j++) {
+				shapeRender.rect(100+i, 100+j, 2, 2);
+			}
+		}
 	}
 	
 	@Override
