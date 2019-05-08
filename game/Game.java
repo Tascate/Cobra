@@ -28,12 +28,12 @@ public class Game {
 		paused = false;
 		ended = false;
 		
-		char1 = new Player(2,new Color(0,0,1,1), 90);
+		char1 = new Player(1,new Color(0,0,1,1), 90);
 		grid[3][6] = char1;
 		char1Row = 3;
 		char1Col = 6;
 		
-		char2 = new Player(2,new Color(1,0,0,1), 90);
+		char2 = new Player(1,new Color(1,0,0,1), 90);
 		grid[9][6] = char2;
 		char2Row = 9;
 		char2Col = 6;
@@ -44,7 +44,7 @@ public class Game {
 	 * and just continue to move the player.
 	 */
 	public void progressGame() {
-		if (!paused || !ended) {
+		if (!paused && !ended) {
 			checkForInput();
 			moveChar1();
 		}
@@ -74,33 +74,26 @@ public class Game {
 	}
 	
 	private void endGame() {
+		System.out.println("Game ended.");
 		ended = true;
 	}
 	
 	private void moveChar1() {
 		System.out.print("Start:");
-		if (!collided(char1, char1Row, char1Col)) {
-			System.out.println(" Movement!");
-			grid[char1Row+calcHorizontal(char1)*char1.getSpeed()][char1Col+calcVertical(char1)*char1.getSpeed()] = char1;
+		boolean collision = !collided(char1, char1Row, char1Col);
+		System.out.println("Collision?:" + collision);
+		if (collision) {
+			System.out.print(" Movement!");
+			int movedHorizontalSpots = calcHorizontal(char1)*char1.getSpeed();
+			int movedVerticalSpots = calcVertical(char1)*char1.getSpeed();
+			grid[char1Row+movedHorizontalSpots][char1Col+movedVerticalSpots] = char1;
 			for(int i = 1; i <= char1.getSpeed(); i++) {
-				grid[char1Row+calcHorizontal(char1)*i][char1Col+calcVertical(char1)*i] = char1.leaveTrail();
+				int horizontalSpot = char1Row+(calcHorizontal(char1)*i);
+				int verticalSpot = char1Col+(calcVertical(char1)*i);
+				grid[horizontalSpot][verticalSpot] = char1.leaveTrail();
 			}
-			char1Row += calcHorizontal(char1)*char1.getSpeed();
-			char1Col += calcVertical(char1)*char1.getSpeed();
-		}
-		else {
-			endGame();
-		}
-	}
-	
-	private void moveChar2() {
-		if (collided(char1, char2Row, char2Col)) {
-			grid[char1Row+calcHorizontal(char1)*char1.getSpeed()][char1Col+calcVertical(char1)*char1.getSpeed()] = char1;
-			for(int i = 1; i <= char1.getSpeed(); i++) {
-				grid[char1Row+calcHorizontal(char1)*i][char1Col+calcVertical(char1)*i] = char1.leaveTrail();
-			}
-			char1Row += calcHorizontal(char1)*char1.getSpeed();
-			char1Col += calcVertical(char1)*char1.getSpeed();
+			char1Row += movedHorizontalSpots;
+			char1Col += movedVerticalSpots;
 		}
 		else {
 			endGame();
@@ -109,22 +102,35 @@ public class Game {
 	
 	private boolean collided(Character character, int playerRow, int playerCol) {
 		//check each spot the player will pass
-		//amount of spots the player will pass = the speed
+		// if occupied return true
 		for(int i = 1; i <= character.getSpeed(); i++) {
-			if (playerRow+calcHorizontal(character)*i < grid.length && 
-				playerRow+calcHorizontal(character)*i >= 0 &&
-				playerRow+calcVertical(character)*i < grid[0].length &&
-				playerRow+calcVertical(character)*i >= 0 &&
-				grid[playerRow+calcHorizontal(character)*i][playerCol+calcVertical(character)*i] == null) {
-				System.out.print(" Free!");
-				return false;
+			int horizontalSpot = playerRow+(calcHorizontal(character)*i);
+			int verticalSpot = playerCol+(calcVertical(character)*i);
+			boolean outOfHorizontalBounds = horizontalSpot >= grid.length || horizontalSpot < 0;
+			boolean outOfVerticalBounds = verticalSpot >= grid[0].length || verticalSpot < 0;
+			//System.out.print("Collision Detection:" + horizontalSpot + "," + verticalSpot + " ");
+			//System.out.print("Horizontal Bounded:" + (!outOfHorizontalBounds) + " ");
+			//System.out.print("Vertical Bounded:" + (!outOfVerticalBounds) + " ");
+			
+			//is the spot out of bounds?
+			if (outOfHorizontalBounds || outOfVerticalBounds) {
+				return true;
+			}
+			// is the spot occupied
+			else if (grid[horizontalSpot][verticalSpot] != null) {
+				System.out.println(" Collided!");
+				return true;
 			}
 		}
-		System.out.println(" Collided!");
-		return true;
+		
+		//area is in bounds and unoccupied
+		System.out.print(" Free!");
+		return false;
 	}
+		
 	
 	private int calcVertical(FieldObject character) {
+		//Calculates the vertical direction the player is moving in
 		switch (character.getAngle()) {
 			case 90:
 				return 1;
@@ -136,6 +142,7 @@ public class Game {
 	}
 	
 	private int calcHorizontal(FieldObject character) {
+		//Returns the horizontal direction the player is moving in
 		switch (character.getAngle()) {
 			case 0:
 				return 1;
@@ -156,5 +163,13 @@ public class Game {
 	
 	public int getChar1Col() {
 		return char1Col;
+	}
+	
+	public int getChar2Row() {
+		return char2Row;
+	}
+	
+	public int getChar2Col() {
+		return char2Col;
 	}
 }
