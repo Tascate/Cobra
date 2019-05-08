@@ -53,7 +53,7 @@ public abstract class FieldObject {
 		speed = s;
 	}
 	
-	
+	public abstract boolean isCharacter();
 	
 	
 }
