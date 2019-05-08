@@ -48,4 +48,8 @@ public class Character extends FieldObject {
 	public boolean returnLifeStatus() {
 		return alive;
 	}
+	
+	public boolean isCharacter() {
+		return true;
+	}
 }
