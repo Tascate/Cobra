@@ -44,16 +44,12 @@ public class Game {
 	 * and just continue to move the player.
 	 */
 	public void progressGame() {
+		checkForInput();
 		if (!paused && !ended) {
-			checkForInput();
 			moveChar1();
 		}
 	}
 	
-	/**
-	 * Method to check for input of what key the player pressed to move, left, right, up, or down. The player
-	 * cannot be going backwards, or turning backwards, so the if statements check for that.
-	 */
 	private void checkForInput() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			if (!(char1.getAngle() == 0))
@@ -78,24 +74,15 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * Method to pause the game.
-	 */
 	private void pauseGame() {
 		paused = !paused;
 	}
 	
-	/**
-	 * Method to end the game.
-	 */
 	private void endGame() {
 		System.out.println(" Game ended.");
 		ended = true;
 	}
 	
-	/**
-	 *
-	 */
 	private void moveChar1() {
 		System.out.print("Start:");
 		boolean collision = collided(char1, char1Row, char1Col);
@@ -172,43 +159,23 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * Method to get the gird of the game to be played on.
-	 * @return grid of game
-	 */
 	public FieldObject[][] getGrid() {
 		return grid;
 	}
 	
 	//should move these methods into Character.java later
-	
-	/**
-	 * Method to get the first character's row value in the game
-	 * @return row value of first character
-	 */
 	public int getChar1Row() {
 		return char1Row;
 	}
 	
-	/**
-	 * Method to get the first character's column value
-	 * @return column value of first character
-	 */
 	public int getChar1Col() {
 		return char1Col;
 	}
-	/**
-	 * Method to get the second character's row value in the game
-	 * @return row value of second character
-	 */
+	
 	public int getChar2Row() {
 		return char2Row;
 	}
 	
-	/**
-	 * Method to get the second character's column value in the game
-	 * @return column value of second character
-	 */
 	public int getChar2Col() {
 		return char2Col;
 	}
