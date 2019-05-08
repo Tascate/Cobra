@@ -50,6 +50,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to check for input of what key the player pressed to move, left, right, up, or down. The player
+	 * cannot be going backwards, or turning backwards, so the if statements check for that.
+	 */
 	private void checkForInput() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			if (!(char1.getAngle() == 0))
