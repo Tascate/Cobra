@@ -11,13 +11,17 @@ public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
 	int scale;
+	int startX;
+	int startY;
 	
 	@Override
 	//Instantiates game
 	public void create () {
 		shapeRender = new ShapeRenderer();
 		round = new Game(150,150);
-		scale = 2;
+		scale = 3;
+		startX = 10;
+		startY = 10;
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class Cobra extends ApplicationAdapter {
 		//Draw Grid Box
 		shapeRender.begin(ShapeType.Line);
 		shapeRender.setColor(Color.GRAY);
-		shapeRender.rect(50, 50, length*scale, width*scale);
+		shapeRender.rect(startX, startY, length*scale, width*scale);
 		shapeRender.end();
 		
 		//Draw Light Trails
@@ -41,7 +45,7 @@ public class Cobra extends ApplicationAdapter {
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
 				if(round.getGrid()[i][j] != null && round.getGrid()[i][j].isCharacter() == false) {
-					shapeRender.rect(50+(i*scale), 50+(j*scale), scale, scale);
+					shapeRender.rect(startX+(i*scale), startY+(j*scale), scale, scale);
 				}
 			}
 		}
@@ -50,13 +54,13 @@ public class Cobra extends ApplicationAdapter {
 		//Draw Player One
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
-		shapeRender.circle(50+(round.getChar1Row()*scale), (50+round.getChar1Col()*scale), scale);
+		shapeRender.circle(startX+(round.getChar1Row()*scale), (startY+round.getChar1Col()*scale), scale);
 		shapeRender.end();
 		
 		//Draw Player Two
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.RED);
-		shapeRender.circle(50+(round.getChar2Row()*scale), (50+round.getChar2Col()*scale), scale);
+		shapeRender.circle(startX+(round.getChar2Row()*scale), (startY+round.getChar2Col()*scale), scale);
 		shapeRender.end();
 	}
 	
