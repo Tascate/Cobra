@@ -20,4 +20,8 @@ public class Trail extends FieldObject {
 		width = 1;
 		
 	}
+	
+	public boolean isCharacter() {
+		return false;
+	}
 }
