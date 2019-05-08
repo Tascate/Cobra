@@ -79,14 +79,14 @@ public class Game {
 	}
 	
 	private void endGame() {
-		System.out.println("Game ended.");
+		System.out.println(" Game ended.");
 		ended = true;
 	}
 	
 	private void moveChar1() {
 		System.out.print("Start:");
 		boolean collision = collided(char1, char1Row, char1Col);
-		System.out.println("Collision?:" + collision);
+		System.out.print(" Collision:" + collision);
 		if (!collision) {
 			System.out.print(" Movement!");
 			int movedHorizontalSpots = calcHorizontal(char1)*char1.getSpeed();
@@ -99,6 +99,7 @@ public class Game {
 			}
 			char1Row += movedHorizontalSpots;
 			char1Col += movedVerticalSpots;
+			System.out.println();
 		}
 		else {
 			endGame();
@@ -129,7 +130,7 @@ public class Game {
 		}
 		
 		//area is in bounds and unoccupied
-		System.out.print(" Free!");
+		System.out.print(" Unoccupied! ");
 		return false;
 	}
 		
