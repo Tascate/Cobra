@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
+	int scale;
 	
 	@Override
 	//Instantiates game
 	public void create () {
 		shapeRender = new ShapeRenderer();
-		round = new Game(75,75);
+		round = new Game(150,150);
+		scale = 2;
 	}
 
 	@Override
@@ -24,26 +26,37 @@ public class Cobra extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.3f, 0.3f, 0.4f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		round.progressGame();
+		int length = round.getGrid().length;
+		int width = round.getGrid()[0].length;
 		
-		
+		//Draw Grid Box
 		shapeRender.begin(ShapeType.Line);
 		shapeRender.setColor(Color.GRAY);
-		shapeRender.rect(100, 100, 150, 150);
+		shapeRender.rect(50, 50, length*scale, width*scale);
 		shapeRender.end();
 		
+		//Draw Light Trails
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.GREEN);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
-				if(round.getGrid()[i][j] != null)
-				shapeRender.rect(100+i, 100+j, 2, 2);
+				if(round.getGrid()[i][j] != null && round.getGrid()[i][j].isCharacter() == false) {
+					shapeRender.rect(50+(i*scale), 50+(j*scale), scale, scale);
+				}
 			}
 		}
 		shapeRender.end();
 		
+		//Draw Player One
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
-		shapeRender.circle(100+round.getChar1Row(), 100+round.getChar1Col(), 2);
+		shapeRender.circle(50+(round.getChar1Row()*scale), (50+round.getChar1Col()*scale), scale);
+		shapeRender.end();
+		
+		//Draw Player Two
+		shapeRender.begin(ShapeType.Filled);
+		shapeRender.setColor(Color.BLUE);
+		shapeRender.circle(50+(round.getChar2Row()*scale), (50+round.getChar2Col()*scale), scale);
 		shapeRender.end();
 	}
 	
