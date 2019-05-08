@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.Color;
  * Game class to run the game.
  */
 public class Game {
-	FieldObject[][] grid;
-	Character char1;
-	Character char2;
+	FieldObject[][] grid; //grid of game
+	Character char1; //player 1
+	Character char2; //player 2
 	int char1Row, char1Col;
 	int char2Row, char2Col;
 	Boolean paused;
@@ -69,10 +69,16 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to pause the game. 
+	 */
 	private void pauseGame() {
 		paused = !paused;
 	}
 	
+	/**
+	 * Method to end the game.
+	 */
 	private void endGame() {
 		System.out.println("Game ended.");
 		ended = true;
