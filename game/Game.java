@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.Color;
  * Game class to run the game.
  */
 public class Game {
-	FieldObject[][] grid;
-	Character char1;
-	Character char2;
-	int char1Row, char1Col;
-	int char2Row, char2Col;
-	Boolean paused;
-	Boolean ended;
+	FieldObject[][] grid; //grid of game
+	Character char1; //player 1
+	Character char2; //player 2
+	int char1Row, char1Col; //player 1 row and column
+	int char2Row, char2Col; //player 2 row and column
+	Boolean paused; //check if game is paused or not
+	Boolean ended; //check if game has ended or not
 	
 	/**
 	 * Game constructor to create the game with the rows and columns, which is the grid of the game. It
