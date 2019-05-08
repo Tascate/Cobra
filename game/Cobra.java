@@ -55,7 +55,7 @@ public class Cobra extends ApplicationAdapter {
 		
 		//Draw Player Two
 		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.BLUE);
+		shapeRender.setColor(Color.RED);
 		shapeRender.circle(50+(round.getChar2Row()*scale), (50+round.getChar2Col()*scale), scale);
 		shapeRender.end();
 	}
