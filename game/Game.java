@@ -28,12 +28,12 @@ public class Game {
 		paused = false;
 		ended = false;
 		
-		char1 = new Player(1,new Color(0,0,1,1), 90);
+		char1 = new Player(2,new Color(0,0,1,1), 90);
 		grid[3][6] = char1;
 		char1Row = 3;
 		char1Col = 6;
 		
-		char2 = new Player(1,new Color(1,0,0,1), 90);
+		char2 = new Player(2,new Color(1,0,0,1), 90);
 		grid[9][6] = char2;
 		char2Row = 9;
 		char2Col = 6;
@@ -45,32 +45,23 @@ public class Game {
 	 */
 	public void progressGame() {
 		if (!paused || !ended) {
-			int speed = char1.getSpeed();
-			checkForInput(speed);
+			checkForInput();
 			moveChar1();
 		}
 	}
 	
-	private void checkForInput(int speed) {
+	private void checkForInput() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            char1.setAngle(180);
-            System.out.println("Left!");
-            char1Row -= speed;
+            char1.setAngle(180);;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             char1.setAngle(0);
-            System.out.println("Right!");
-            char1Row += speed;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
             char1.setAngle(90);
-            System.out.println("Up!");
-            char1Col += speed;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             char1.setAngle(270);
-            System.out.println("Down!");
-            char1Col -= speed;
         }
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
@@ -87,7 +78,9 @@ public class Game {
 	}
 	
 	private void moveChar1() {
-		if (!collided(char2, char1Row, char1Col)) {
+		System.out.print("Start:");
+		if (!collided(char1, char1Row, char1Col)) {
+			System.out.println(" Movement!");
 			grid[char1Row+calcHorizontal(char1)*char1.getSpeed()][char1Col+calcVertical(char1)*char1.getSpeed()] = char1;
 			for(int i = 1; i <= char1.getSpeed(); i++) {
 				grid[char1Row+calcHorizontal(char1)*i][char1Col+calcVertical(char1)*i] = char1.leaveTrail();
@@ -122,10 +115,12 @@ public class Game {
 				playerRow+calcHorizontal(character)*i >= 0 &&
 				playerRow+calcVertical(character)*i < grid[0].length &&
 				playerRow+calcVertical(character)*i >= 0 &&
-				grid[playerRow+calcHorizontal(character)*i][playerCol+calcVertical(character)*i] != null) {
+				grid[playerRow+calcHorizontal(character)*i][playerCol+calcVertical(character)*i] == null) {
+				System.out.print(" Free!");
 				return false;
 			}
 		}
+		System.out.println(" Collided!");
 		return true;
 	}
 	
@@ -133,10 +128,8 @@ public class Game {
 		switch (character.getAngle()) {
 			case 90:
 				return 1;
-				break;
 			case 270:
 				return -1;
-				break;
 			default:
 				return 0;
 		}
@@ -146,16 +139,14 @@ public class Game {
 		switch (character.getAngle()) {
 			case 0:
 				return 1;
-				break;
 			case 180:
 				return -1;
-				break;
 			default:
 				return 0;
 		}
 	}
 	
-	public FieldObject[][] returnGrid() {
+	public FieldObject[][] getGrid() {
 		return grid;
 	}
 	
