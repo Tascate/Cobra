@@ -93,6 +93,9 @@ public class Game {
 		ended = true;
 	}
 	
+	/**
+	 *
+	 */
 	private void moveChar1() {
 		System.out.print("Start:");
 		boolean collision = collided(char1, char1Row, char1Col);
