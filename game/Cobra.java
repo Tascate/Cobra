@@ -31,18 +31,20 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.rect(100, 100, 150, 150);
 		shapeRender.end();
 		
-		shapeRender.bein(ShapeType.Filled);
-		shapeRender.setColor(Color.BLUE);
-		shapeRender.circle(100+round.getChar1Row(), 100+round.getChar1Col(), 2);
-		shapeRender.end();
-		
 		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.LIGHTBLUE);
-		for (int i = 0; i < grid.length; i++) {
-			for(int j = 0; j <grid[i].length; j++) {
+		shapeRender.setColor(Color.GREEN);
+		for (int i = 0; i < round.getGrid().length; i++) {
+			for(int j = 0; j <round.getGrid()[i].length; j++) {
+				if(round.getGrid()[i][j] != null)
 				shapeRender.rect(100+i, 100+j, 2, 2);
 			}
 		}
+		shapeRender.end();
+		
+		shapeRender.begin(ShapeType.Filled);
+		shapeRender.setColor(Color.BLUE);
+		shapeRender.circle(100+round.getChar1Row(), 100+round.getChar1Col(), 2);
+		shapeRender.end();
 	}
 	
 	@Override
