@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.Color;
  * Game class to run the game.
  */
 public class Game {
-	FieldObject[][] grid; //grid of game
-	Character char1; //player 1
-	Character char2; //player 2
+	FieldObject[][] grid;
+	Character char1;
+	Character char2;
 	int char1Row, char1Col;
 	int char2Row, char2Col;
 	Boolean paused;
@@ -52,16 +52,21 @@ public class Game {
 	
 	private void checkForInput() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+			if (!(char1.getAngle() == 0))
             char1.setAngle(180);;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+			if (!(char1.getAngle() == 180))
             char1.setAngle(0);
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+			if (!(char1.getAngle() == 270)) 
             char1.setAngle(90);
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            char1.setAngle(270);
+			if (!(char1.getAngle() == 90)) {
+				char1.setAngle(270);
+			}
         }
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
@@ -69,16 +74,10 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * Method to pause the game. 
-	 */
 	private void pauseGame() {
 		paused = !paused;
 	}
 	
-	/**
-	 * Method to end the game.
-	 */
 	private void endGame() {
 		System.out.println("Game ended.");
 		ended = true;
@@ -86,9 +85,9 @@ public class Game {
 	
 	private void moveChar1() {
 		System.out.print("Start:");
-		boolean collision = !collided(char1, char1Row, char1Col);
+		boolean collision = collided(char1, char1Row, char1Col);
 		System.out.println("Collision?:" + collision);
-		if (collision) {
+		if (!collision) {
 			System.out.print(" Movement!");
 			int movedHorizontalSpots = calcHorizontal(char1)*char1.getSpeed();
 			int movedVerticalSpots = calcVertical(char1)*char1.getSpeed();
@@ -159,42 +158,23 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * Method to return the grid that the game will be played on.
-	 * @return grid of game
-	 */
 	public FieldObject[][] getGrid() {
 		return grid;
 	}
 	
-	/**
-	 * Method to return the row value of the first character
-	 * @return row value of first character
-	 */
+	//should move these methods into Character.java later
 	public int getChar1Row() {
 		return char1Row;
 	}
 	
-	/**
-	 * Method to return the column value of the first character
-	 * @return column value of first character
-	 */
 	public int getChar1Col() {
 		return char1Col;
 	}
 	
-	/**
-	 * Method to return the row value of the second character
-	 * @return row value of second character
-	 */
 	public int getChar2Row() {
 		return char2Row;
 	}
 	
-	/**
-	 * Method to return the column value of the second character
-	 * @return column value of second character
-	 */
 	public int getChar2Col() {
 		return char2Col;
 	}
