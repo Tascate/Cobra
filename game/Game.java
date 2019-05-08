@@ -74,10 +74,16 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to pause the game.
+	 */
 	private void pauseGame() {
 		paused = !paused;
 	}
 	
+	/**
+	 * Method to end the game.
+	 */
 	private void endGame() {
 		System.out.println(" Game ended.");
 		ended = true;
@@ -159,23 +165,43 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to get the gird of the game to be played on.
+	 * @return grid of game
+	 */
 	public FieldObject[][] getGrid() {
 		return grid;
 	}
 	
 	//should move these methods into Character.java later
+	
+	/**
+	 * Method to get the first character's row value in the game
+	 * @return row value of first character
+	 */
 	public int getChar1Row() {
 		return char1Row;
 	}
 	
+	/**
+	 * Method to get the first character's column value
+	 * @return column value of first character
+	 */
 	public int getChar1Col() {
 		return char1Col;
 	}
-	
+	/**
+	 * Method to get the second character's row value in the game
+	 * @return row value of second character
+	 */
 	public int getChar2Row() {
 		return char2Row;
 	}
 	
+	/**
+	 * Method to get the second character's column value in the game
+	 * @return column value of second character
+	 */
 	public int getChar2Col() {
 		return char2Col;
 	}
