@@ -18,8 +18,8 @@ public class Cobra extends ApplicationAdapter {
 	//Instantiates game
 	public void create () {
 		shapeRender = new ShapeRenderer();
-		round = new Game(150,150);
-		scale = 3;
+		round = new Game(300,225);
+		scale = 2;
 		startX = 10;
 		startY = 10;
 	}
@@ -27,7 +27,7 @@ public class Cobra extends ApplicationAdapter {
 	@Override
 	//Runs this method every frame
 	public void render () {
-		Gdx.gl.glClearColor(0.3f, 0.3f, 0.4f, 1);
+		Gdx.gl.glClearColor(0.96f, 0.96f, 0.86f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		round.progressGame();
 		int length = round.getGrid().length;
@@ -41,10 +41,11 @@ public class Cobra extends ApplicationAdapter {
 		
 		//Draw Light Trails
 		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.GREEN);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
 				if(round.getGrid()[i][j] != null && round.getGrid()[i][j].isCharacter() == false) {
+					Color trail = round.getGrid()[i][j].getColor();
+					shapeRender.setColor(trail);
 					shapeRender.rect(startX+(i*scale), startY+(j*scale), scale, scale);
 				}
 			}
@@ -54,7 +55,7 @@ public class Cobra extends ApplicationAdapter {
 		//Draw Player One
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
-		shapeRender.circle(startX+(round.getChar1Row()*scale), (startY+round.getChar1Col()*scale), scale);
+		shapeRender.circle(startX+(round.getChar1Row()*scale)+1, (startY+round.getChar1Col()*scale)+1, scale);
 		shapeRender.end();
 		
 		//Draw Player Two
