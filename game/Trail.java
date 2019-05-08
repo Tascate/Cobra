@@ -21,6 +21,10 @@ public class Trail extends FieldObject {
 		
 	}
 	
+	/**
+	 * Method to see if it is an actual character or not
+	 * @return true if it is an actual character, false otherwise
+	 */
 	public boolean isCharacter() {
 		return false;
 	}
