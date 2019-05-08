@@ -153,22 +153,42 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to return the grid that the game will be played on.
+	 * @return grid of game
+	 */
 	public FieldObject[][] getGrid() {
 		return grid;
 	}
 	
+	/**
+	 * Method to return the row value of the first character
+	 * @return row value of first character
+	 */
 	public int getChar1Row() {
 		return char1Row;
 	}
 	
+	/**
+	 * Method to return the column value of the first character
+	 * @return column value of first character
+	 */
 	public int getChar1Col() {
 		return char1Col;
 	}
 	
+	/**
+	 * Method to return the row value of the second character
+	 * @return row value of second character
+	 */
 	public int getChar2Row() {
 		return char2Row;
 	}
 	
+	/**
+	 * Method to return the column value of the second character
+	 * @return column value of second character
+	 */
 	public int getChar2Col() {
 		return char2Col;
 	}
