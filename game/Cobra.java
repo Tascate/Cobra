@@ -10,9 +10,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
+	int fps;
 	int scale;
 	int startX;
 	int startY;
+	
+	public Cobra() {}
+	
+	public Cobra(int frames) {
+		fps = frames;
+	}
 	
 	@Override
 	//Instantiates game
