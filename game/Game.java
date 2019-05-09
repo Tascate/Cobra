@@ -90,14 +90,18 @@ public class Game {
 	 * Method to end the game.
 	 */
 	private void endGame() {
-		System.out.println(" Game ended.");
+		System.out.println("\n Game ended.");
 		ended = true;
 	}
 	
+	/**
+	 * Method to move the character during the game. If the space they are moving into is unoccupied, they keep moving. Otherwise,
+	 * if they player is going to a place that is occupied and is collided with anything, the game ends and they die.
+	 */
 	private void moveChar1() {
 		System.out.print("Start:");
 		boolean collision = collided(char1, char1Row, char1Col);
-		System.out.print(" Collision:" + collision);
+		System.out.print(" Collision: " + collision);
 		if (!collision) {
 			System.out.print(" Movement!");
 			int movedHorizontalSpots = calcHorizontal(char1)*char1.getSpeed();
@@ -117,6 +121,14 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Check to see each spot that the player will pass in the game. If the spot that the player is going to is occupied,
+	 * the method will return true, meaning that the player has collided and will end the game, false otherwise.
+	 * @param character - player
+	 * @param playerRow - row value of player
+	 * @param playerCol - column value of player
+	 * @return true if spot player went is occupied, false otherwise
+	 */
 	private boolean collided(Character character, int playerRow, int playerCol) {
 		//check each spot the player will pass
 		// if occupied return true
