@@ -17,7 +17,7 @@ public class Game {
 	Boolean ended; //check if game has ended or not
 	
 	/**
-	 * Game constructor to create the game with the rows and columns, which is the grid of the game. It
+	 * Game constructor to create the game with the rows and columns; the grid of the game. It
 	 * also sets paused and ended to false, indicating that the game has just started. It also creates 2 players to play
 	 * the game.
 	 * @param rows - rows of grid of game
