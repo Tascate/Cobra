@@ -50,6 +50,11 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to check for where the player wants the character in the game to go, where to turn. The only thing
+	 * is that the character is not allowed to automatically turn backwards. If the player tries to turn backwards,
+	 * it will not work and the character will just keep going that way.
+	 */
 	private void checkForInput() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			if (!(char1.getAngle() == 0))
