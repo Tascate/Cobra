@@ -197,6 +197,16 @@ public class Game {
 		return grid;
 	}
 	
+	public int findWinner() {
+		if (char1.returnLifeStatus()) {
+			return 1;
+		}
+		else if (char2.returnLifeStatus()) {
+			return 2;
+		}
+		return 0;
+	}
+	
 	//should move these methods into Character.java later
 	
 	/**
