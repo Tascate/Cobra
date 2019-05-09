@@ -157,7 +157,10 @@ public class Game {
 		return false;
 	}
 		
-	
+	/**
+	 * Method to calculate the vertical directions the current player is moving in
+	 * @return 1 if angle is 90, -1 if angle is 270, and default is 0.
+	 */
 	private int calcVertical(FieldObject character) {
 		//Calculates the vertical direction the player is moving in
 		switch (character.getAngle()) {
@@ -170,6 +173,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 *
+	 *
+	 */
 	private int calcHorizontal(FieldObject character) {
 		//Returns the horizontal direction the player is moving in
 		switch (character.getAngle()) {
