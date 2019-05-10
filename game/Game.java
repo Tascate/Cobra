@@ -11,8 +11,6 @@ public class Game {
 	FieldObject[][] grid; //grid of game
 	Character char1; //player 1
 	Character char2; //player 2
-	int char1Row, char1Col; //player 1 row and column
-	int char2Row, char2Col; //player 2 row and column
 	Boolean paused; //check if game is paused or not
 	Boolean ended; //check if game has ended or not
 	
@@ -28,15 +26,11 @@ public class Game {
 		paused = false;
 		ended = false;
 		
-		char1 = new Player(1,new Color(0,0,1,1), 90); //creates a new player
-		grid[3][6] = char1;
-		char1Row = 3;
-		char1Col = 6;
+		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 90);
+		grid[rows * 1/8][cols * 1/2] = char1;
 		
-		char2 = new Player(1,new Color(1,0,0,1), 90); //creates a new player
-		grid[9][6] = char2;
-		char2Row = 9;
-		char2Col = 6;
+		char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 90);
+		grid[rows - (rows * 1/8)][cols * 1/2] = char2;
 	}
 	
 	/**
@@ -98,22 +92,29 @@ public class Game {
 	 * Method to move the character during the game. If the space they are moving into is unoccupied, they keep moving. Otherwise,
 	 * if they player is going to a place that is occupied and is collided with anything, the game ends and they die.
 	 */
-	private void moveChar1() {
-		System.out.print("Start:");
-		boolean collision = collided(char1, char1Row, char1Col);
-		System.out.print(" Collision: " + collision);
+	private void moveChar(Character character) {
+		// System.out.print("Start:");
+		
+		int row = character.getRow();
+		int col = character.getCol();
+		
+		boolean collision = collided(character, row, col);
+		// System.out.print(" Collision: " + collision);
+		
 		if (!collision) {
-			System.out.print(" Movement!");
-			int movedHorizontalSpots = calcHorizontal(char1)*char1.getSpeed();
-			int movedVerticalSpots = calcVertical(char1)*char1.getSpeed();
-			grid[char1Row+movedHorizontalSpots][char1Col+movedVerticalSpots] = char1;
+			// System.out.print(" Movement!");
+			int movedHorizontalSpots = calcHorizontal(character)*character.getSpeed();
+			int movedVerticalSpots = calcVertical(character)*character.getSpeed();
+			
+			grid[row+movedHorizontalSpots][col+movedVerticalSpots] = character;
+			
 			for(int i = 1; i <= char1.getSpeed(); i++) {
-				int horizontalSpot = char1Row+(calcHorizontal(char1)*i);
-				int verticalSpot = char1Col+(calcVertical(char1)*i);
-				grid[horizontalSpot][verticalSpot] = char1.leaveTrail();
+				int horizontalSpot = row+(calcHorizontal(character)*i);
+				int verticalSpot = col+(calcVertical(character)*i);
+				grid[horizontalSpot][verticalSpot] = character.leaveTrail(horizontalSpot, verticalSpot);
 			}
-			char1Row += movedHorizontalSpots;
-			char1Col += movedVerticalSpots;
+			character.setRow(row += movedHorizontalSpots);
+			character.setCol(col += movedVerticalSpots);
 			System.out.println();
 		}
 		else {
