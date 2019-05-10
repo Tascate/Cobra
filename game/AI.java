@@ -13,8 +13,8 @@ public class AI extends Character {
 	 * @param c - color of AI
 	 * @param a - angle of AI
 	 */
-	public AI(int s,Color c,int a) {
-		super(s,c,a);
+	public AI(int row, int col, int speed, Color color, int angle) {
+		super(row, col, speed, color, angle);
 		wins = 0;
 	}
 	//2D boolean (true/false) array
