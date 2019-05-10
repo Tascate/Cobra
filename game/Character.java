@@ -35,7 +35,7 @@ public class Character extends FieldObject {
 	}
 	/**
 	 *Method to return the speed of the character.
-	 *@return speed of characterr.
+	 *@return speed of character.
 	 */
 	public int returnSpeed() {
 		return speed;
