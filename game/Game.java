@@ -21,6 +21,7 @@ public class Game {
 	 * the game.
 	 * @param rows - rows of grid of game
 	 * @param cols - cols of grid of game
+	 * @param twoPlayer - if the 2nd player is an AI or not
 	 */
 	public Game(int rows, int cols, Boolean twoPlayer) {
 		grid = new FieldObject[rows][cols];
