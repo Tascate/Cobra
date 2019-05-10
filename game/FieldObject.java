@@ -9,6 +9,8 @@ public abstract class FieldObject {
 	protected Color light; //color of character
 	protected int angle; //angle of character, where they changed directions
 	protected int speed; //speed of character
+	protected int row; //row of the FieldObject
+	protected int col; //column of the FieldObject
 	
 	/**
 	 * Method to return the color of the character in the game.
@@ -26,10 +28,6 @@ public abstract class FieldObject {
 		return angle;
 	}
 	
-	/**
-	 * Method to get the speed of the character.
-	 * @return speed of character.
-	 */
 	public int getSpeed() {
 		return speed;
 	}
@@ -57,10 +55,22 @@ public abstract class FieldObject {
 		speed = s;
 	}
 	
-	/**
-	 * Abstract boolean method for if it's a character or not.
-	 * Method to be implemented in the child class.
-	 */
+	public void setRow(int theRow) {
+		row = theRow;
+	}
+	
+	public void setCol(int theColumn) {
+		col = theColumn;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
 	public abstract boolean isCharacter();
 	
 	
