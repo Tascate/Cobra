@@ -199,6 +199,10 @@ public class Game {
 		return grid;
 	}
 	
+	/**
+	 * Method to find and return the winner.
+	 * @return the winner of game.
+	 */
 	public int findWinner() {
 		if (char1.returnLifeStatus()) {
 			return 1;
