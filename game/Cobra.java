@@ -15,8 +15,17 @@ public class Cobra extends ApplicationAdapter {
 	int startX;
 	int startY;
 	
-	public Cobra() {}
+	/**
+	 * Default cobra constructor.
+	 */
+	public Cobra() {
+		
+	}
 	
+	/**
+	 * Parameter Cobra constructor to get the fps(frames per second).
+	 * @param frames - frames per second
+	 */
 	public Cobra(int frames) {
 		fps = frames;
 	}
