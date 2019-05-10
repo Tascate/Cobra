@@ -40,7 +40,7 @@ public class Cobra extends ApplicationAdapter {
 	public void create () {
 		shapeRender = new ShapeRenderer();
 		round = new Game(300,225);
-		scale = 2;
+		scale = 2.0f;
 		startX = 10;
 		startY = 10;
 	}
