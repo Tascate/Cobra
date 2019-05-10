@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
  * Character class to make the characters in the game with the necessary features for the characters. 
  */
 public class Character extends FieldObject {
-	protected boolean alive;
+	protected boolean alive; //is character alive or not
 	
 	/**
 	* Constructor to initialize the instance variable to the passed in values to make the character and add their features.
