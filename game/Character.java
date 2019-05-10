@@ -49,6 +49,10 @@ public class Character extends FieldObject {
 		return alive;
 	}
 	
+	/**
+	 * Method to return true if the character is an actual character in the game, false otherwise.
+	 * @return true if character is an actual character in game, false otherwise.
+	 */
 	public boolean isCharacter() {
 		return true;
 	}
