@@ -57,6 +57,10 @@ public abstract class FieldObject {
 		speed = s;
 	}
 	
+	/**
+	 * Abstract boolean method for if it's a character or not.
+	 * Method to be implemented in the child class.
+	 */
 	public abstract boolean isCharacter();
 	
 	
