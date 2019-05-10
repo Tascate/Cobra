@@ -11,6 +11,7 @@ public class Game {
 	FieldObject[][] grid; //grid of game
 	Character char1; //player 1
 	Character char2; //player 2
+	Boolean realOpponent; //whether Player 2 is a Second Player or AI
 	Boolean paused; //check if game is paused or not
 	Boolean ended; //check if game has ended or not
 	
@@ -21,10 +22,11 @@ public class Game {
 	 * @param rows - rows of grid of game
 	 * @param cols - cols of grid of game
 	 */
-	public Game(int rows, int cols) {
+	public Game(int rows, int cols, Boolean twoPlayer) {
 		grid = new FieldObject[rows][cols];
 		paused = false;
 		ended = false;
+		realOpponent = twoPlayer;
 		
 		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 90);
 		grid[rows * 1/8][cols * 1/2] = char1;
@@ -50,6 +52,7 @@ public class Game {
 	 * it will not work and the character will just keep going that way.
 	 */
 	private void checkForInput() {
+		//Player 1's Input
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			if (!(char1.getAngle() == 0))
             char1.setAngle(180);;
@@ -67,6 +70,27 @@ public class Game {
 				char1.setAngle(270);
 			}
         }
+		
+		//Player 2's Input if not a CPU
+		if (realOpponent) {
+			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+				if (!(char1.getAngle() == 0))
+				char1.setAngle(180);;
+        	}
+			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+				if (!(char1.getAngle() == 180))
+				char1.setAngle(0);
+        	}
+			if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+				if (!(char1.getAngle() == 270)) 
+				char1.setAngle(90);
+        	}
+			if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+				if (!(char1.getAngle() == 90)) {
+					char1.setAngle(270);
+				}
+        	}
+		}
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 			pauseGame();
