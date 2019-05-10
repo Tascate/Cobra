@@ -14,8 +14,8 @@ public class Player extends Character {
 	 * @param c - color
 	 * @param a - angle
 	 */
-	public Player(int s,Color c,int a) {
-		super(s,c,a);
+	public Player(int row, int col, int speed, Color color, int angle) {
+		super(row, col, speed, color, angle);
 		wins = 0;
 	}
 }
