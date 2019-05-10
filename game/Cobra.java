@@ -14,7 +14,7 @@ public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
 	Game round;
 	int fps;
-	int scale;
+	float scale;
 	int startX;
 	int startY;
 	
