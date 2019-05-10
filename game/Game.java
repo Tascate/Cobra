@@ -40,7 +40,7 @@ public class Game {
 	public void progressGame() {
 		checkForInput();
 		if (!paused && !ended) {
-			moveChar1();
+			moveChar(char1);
 		}
 	}
 	
