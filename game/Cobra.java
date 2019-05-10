@@ -22,7 +22,9 @@ public class Cobra extends ApplicationAdapter {
 	}
 	
 	@Override
-	//Instantiates game
+	/**
+	 * Method to instantiate the game.
+	 */
 	public void create () {
 		shapeRender = new ShapeRenderer();
 		round = new Game(300,225);
@@ -73,7 +75,9 @@ public class Cobra extends ApplicationAdapter {
 	}
 	
 	@Override
-	//Disposes of objects after Quitting
+	/**
+	 * Method to dispose of objects after quitting game.
+	 */
 	public void dispose () {
 		shapeRender.dispose();
 	}
