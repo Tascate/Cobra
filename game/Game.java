@@ -28,12 +28,12 @@ public class Game {
 		paused = false;
 		ended = false;
 		
-		char1 = new Player(1,new Color(0,0,1,1), 90);
+		char1 = new Player(1,new Color(0,0,1,1), 90); //creates a new player
 		grid[3][6] = char1;
 		char1Row = 3;
 		char1Col = 6;
 		
-		char2 = new Player(1,new Color(1,0,0,1), 90);
+		char2 = new Player(1,new Color(1,0,0,1), 90); //creates a new player
 		grid[9][6] = char2;
 		char2Row = 9;
 		char2Col = 6;
@@ -158,7 +158,8 @@ public class Game {
 	}
 		
 	/**
-	 * Method to calculate the vertical directions the current player is moving in
+	 * Method to calculate and return the vertical directions the player is moving in.
+	 * @param character - character in the game.
 	 * @return 1 if angle is 90, -1 if angle is 270, and default is 0.
 	 */
 	private int calcVertical(FieldObject character) {
@@ -174,8 +175,9 @@ public class Game {
 	}
 	
 	/**
-	 *
-	 *
+	 * Method to calculate and return the horizontal direction the player is moving in.
+	 * @param character - character in the game
+	 * @return 1 if angle is 0, -1 if angle is 180, and default is 0.
 	 */
 	private int calcHorizontal(FieldObject character) {
 		//Returns the horizontal direction the player is moving in
