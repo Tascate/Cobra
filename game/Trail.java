@@ -1,3 +1,4 @@
+
 package com.mygdx.game;
 import com.badlogic.gdx.graphics.Color;
 
@@ -13,7 +14,10 @@ public class Trail extends FieldObject {
 	 * @param c - color
 	 * @param a - angle
          */	
-	public Trail(Color c, int a) {
+	public Trail(int givenRow, int givenColumn, Color c, int a) {
+		row = givenRow;
+		col = givenColumn;
+		
 		light = c;
 		angle = a;
 		length = 7;
