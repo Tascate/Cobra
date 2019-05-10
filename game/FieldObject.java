@@ -59,22 +59,43 @@ public abstract class FieldObject {
 		speed = s;
 	}
 	
+	/**
+	 * Method to set the row of grid to the passed in value for row.
+	 * @param theRow - row of grid 
+	 */
 	public void setRow(int theRow) {
 		row = theRow;
 	}
 	
+	/**
+	 * Method to set the column of grid to the passed in value for column.
+	 * @param theColumn - column of grid 
+	 */
 	public void setCol(int theColumn) {
 		col = theColumn;
 	}
 	
+	/**
+	 * Method to get the row.
+	 * @return row
+	 */
 	public int getRow() {
 		return row;
 	}
 	
+	/**
+	 * Method to get the column.
+	 * @return column.
+	 */
 	public int getCol() {
 		return col;
 	}
 	
+	/**
+	 * Abstract boolean method to see if it's an actual character or not. This is to be implemented
+	 * in the child class.
+	 * @return true if it's a character, false otherwise
+	 */
 	public abstract boolean isCharacter();
 	
 	
