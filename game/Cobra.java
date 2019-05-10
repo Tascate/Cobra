@@ -46,7 +46,9 @@ public class Cobra extends ApplicationAdapter {
 	}
 
 	@Override
-	//Runs this method every frame
+	/**
+	 * Runs this method every frame while the game is running
+	 */
 	public void render () {
 		Gdx.gl.glClearColor(0.96f, 0.96f, 0.86f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -54,13 +56,13 @@ public class Cobra extends ApplicationAdapter {
 		int length = round.getGrid().length;
 		int width = round.getGrid()[0].length;
 		
-		//Draw Grid Box
+		//Draws Grid Box for game
 		shapeRender.begin(ShapeType.Line);
 		shapeRender.setColor(Color.GRAY);
 		shapeRender.rect(startX, startY, length*scale, width*scale);
 		shapeRender.end();
 		
-		//Draw Light Trails
+		//Draw Light Trails for character in game
 		shapeRender.begin(ShapeType.Filled);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
