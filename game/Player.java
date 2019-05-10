@@ -10,6 +10,8 @@ public class Player extends Character {
 	/**
 	 * Constructor to create the player with their speed, color, and angle. It calls the constructor of the
 	 * super class to get the speed, color, and angle of player. It also sets the number of wins to 0 as a start.
+	 * @param row - row of player
+	 * @param col - column of player
 	 * @param s - speed
 	 * @param c - color
 	 * @param a - angle
