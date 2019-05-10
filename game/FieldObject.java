@@ -26,6 +26,10 @@ public abstract class FieldObject {
 		return angle;
 	}
 	
+	/**
+	 * Method to get the speed of the character.
+	 * @return speed of character.
+	 */
 	public int getSpeed() {
 		return speed;
 	}
