@@ -29,10 +29,10 @@ public class Game {
 		ended = false;
 		realOpponent = twoPlayer;
 		
-		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 90);
+		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
 		
-		char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 90);
+		char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
 		grid[rows - (rows * 1/8)][cols * 1/2] = char2;
 	}
 	
@@ -74,23 +74,23 @@ public class Game {
 		
 		//Player 2's Input if not a CPU
 		if (realOpponent) {
-			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-				if (!(char1.getAngle() == 0))
-				char1.setAngle(180);;
-        	}
-			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-				if (!(char1.getAngle() == 180))
-				char1.setAngle(0);
-        	}
-			if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-				if (!(char1.getAngle() == 270)) 
-				char1.setAngle(90);
-        	}
-			if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-				if (!(char1.getAngle() == 90)) {
-					char1.setAngle(270);
+			if(Gdx.input.isKeyPressed(Input.Keys.A)){
+				if (!(char2.getAngle() == 0))
+					char2.setAngle(180);;
+        		}
+			if(Gdx.input.isKeyPressed(Input.Keys.D)){
+				if (!(char2.getAngle() == 180))
+					char2.setAngle(0);
+        		}
+			if(Gdx.input.isKeyPressed(Input.Keys.W)){
+				if (!(char2.getAngle() == 270)) 
+					char2.setAngle(90);
+        		}
+			if(Gdx.input.isKeyPressed(Input.Keys.S)){
+				if (!(char2.getAngle() == 90)) {
+					char2.setAngle(270);
 				}
-        	}
+        		}
 		}
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
