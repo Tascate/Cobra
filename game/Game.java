@@ -220,7 +220,7 @@ public class Game {
 	 * @return row of first character
 	 */
 	public int getChar1Row() {
-		return char1Row;
+		return char1.getRow();
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class Game {
 	 * @return column of first character
 	 */
 	public int getChar1Col() {
-		return char1Col;
+		return char1.getCol();
 	}
 	
 	/**
@@ -236,7 +236,7 @@ public class Game {
 	 * @return row of first character
 	 */
 	public int getChar2Row() {
-		return char2Row;
+		return char2.getRow();
 	}
 	
 	/**
@@ -244,6 +244,6 @@ public class Game {
 	 * @return column of second character
 	 */
 	public int getChar2Col() {
-		return char2Col;
+		return char2.getCol();
 	}
 }
