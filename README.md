@@ -1,10 +1,9 @@
 # To-Do Probably
-- Clean up the Code
-- Clean up calcHorizontal & calcVertical
-- Move Character's Row and Column into FieldObject?
-- Control the Second Character
-- Render the Grid
 - Properly end the game (End Screen, stop progressGame())
+- Properly restart the game
+- Program AI
+- Create menu screen
+- Add in power-up items (increase trailing light length, faster player?)
 
 # Code Overview:
 ## Cobra.java
