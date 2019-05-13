@@ -27,7 +27,12 @@ public class AI extends Character {
 	//3 - down
 	//4 - left
 	int direction = 1;
-
+	
+	/**
+	* Creates the grid that the game takes place on and sets the grid to false except the player positions
+	* @param startX - starting column position
+	* @param startY - starting row position
+	*/
 	void init(int startX, int startY){
 	    //set the x and y to a starting position
 	    x = startX;
@@ -46,7 +51,10 @@ public class AI extends Character {
 	    //and this will set the starting position to true
 	    map[x][y] = true;
 	}
-
+	
+	/**
+	* Enables the player to move around and detects if player goes out of bounds
+	*/
 	void tick(){
 	    try{
 	        //try to go straight and will error if 
