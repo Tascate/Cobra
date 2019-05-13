@@ -1,4 +1,4 @@
-# To-Do Probably
+# To-Do 
 - Properly end the game (End Screen, stop progressGame())
 - Properly restart the game
 - Program AI
