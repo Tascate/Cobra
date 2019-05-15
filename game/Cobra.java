@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,6 +18,7 @@ public class Cobra extends ApplicationAdapter {
 	float scale;
 	int startX;
 	int startY;
+	boolean secondPlayer;
 	
 	/**
 	 * Default cobra constructor.
@@ -37,22 +39,32 @@ public class Cobra extends ApplicationAdapter {
 	/**
 	 * Method to instantiate the game.
 	 */
-	public void create () {
+	public void create() {
 		shapeRender = new ShapeRenderer();
-		round = new Game(300,225, true);
+		secondPlayer = false;
+		round = new Game(300,225, secondPlayer);
 		scale = 2.0f;
 		startX = 10;
 		startY = 10;
+	}
+	
+	public void reset() {
+		round = new Game(300,225, secondPlayer);
 	}
 
 	@Override
 	/**
 	 * Runs this method every frame while the game is running
 	 */
-	public void render () {
+	public void render() {
 		Gdx.gl.glClearColor(0.96f, 0.96f, 0.86f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		round.progressGame();
+		if (!round.isGameEnded()) {
+			round.progressGame();
+		}
+		else if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+			reset();
+		}
 		int length = round.getGrid().length;
 		int width = round.getGrid()[0].length;
 		
@@ -84,7 +96,7 @@ public class Cobra extends ApplicationAdapter {
 		//Draw Player Two
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.RED);
-		shapeRender.circle(startX+(round.getChar2Row()*scale), (startY+round.getChar2Col()*scale), scale);
+		shapeRender.circle(startX+(round.getChar2Row()*scale)+1, (startY+round.getChar2Col()*scale)+1, scale);
 		shapeRender.end();
 	}
 	
