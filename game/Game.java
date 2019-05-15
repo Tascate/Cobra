@@ -11,6 +11,7 @@ public class Game {
 	FieldObject[][] grid; //grid of game
 	Character char1; //player 1
 	Character char2; //player 2
+	AI ai;
 	Boolean realOpponent; //whether Player 2 is a Second Player or AI
 	Boolean paused; //check if game is paused or not
 	Boolean ended; //check if game has ended or not
@@ -27,12 +28,19 @@ public class Game {
 		grid = new FieldObject[rows][cols];
 		paused = false;
 		ended = false;
-		realOpponent = twoPlayer;
+		realOpponent = true;
 		
 		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
 		
-		char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
+		if (realOpponent) {
+			char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
+		}
+		else {
+			ai = new AI(rows - (rows * 1/6), cols * 1/4, 1,new Color(1,0,0,1), 0);
+			char2 = ai;
+		}
+		
 		grid[rows - (rows * 1/8)][cols * 1/2] = char2;
 	}
 	
@@ -44,6 +52,11 @@ public class Game {
 		checkForInput();
 		if (!paused && !ended) {
 			moveChar(char1);
+			if (!realOpponent) {
+				ai.init(grid);
+				ai.tick();
+			}
+			moveChar(char2);
 		}
 	}
 	
@@ -111,6 +124,28 @@ public class Game {
 	private void endGame() {
 		System.out.println("\n Game ended.");
 		ended = true;
+		
+		//Should display it on Game Screen later
+		switch (findWinner()) {
+			case 0:
+				System.out.println(" Both Players tied!");
+				break;
+			case 1:
+				System.out.println(" Player One wins!");
+				break;
+			case 2:
+				if (realOpponent) {
+					System.out.println(" Player Two wins!");
+				}
+				else {
+					System.out.println(" AI wins!");
+				}
+				break;
+			case -1:
+				System.out.println("Error! Something went wrong in finding the Winner.");
+				break;
+		}
+		System.out.println("\n Press the Enter Key to Restart");
 	}
 	
 	/**
@@ -133,16 +168,18 @@ public class Game {
 			
 			grid[row+movedHorizontalSpots][col+movedVerticalSpots] = character;
 			
-			for(int i = 1; i <= char1.getSpeed(); i++) {
+			for(int i = 0; i < char1.getSpeed(); i++) {
 				int horizontalSpot = row+(calcHorizontal(character)*i);
 				int verticalSpot = col+(calcVertical(character)*i);
 				grid[horizontalSpot][verticalSpot] = character.leaveTrail(horizontalSpot, verticalSpot);
 			}
+			
 			character.setRow(row += movedHorizontalSpots);
 			character.setCol(col += movedVerticalSpots);
 			System.out.println();
 		}
 		else {
+			character.die();
 			endGame();
 		}
 	}
@@ -169,10 +206,19 @@ public class Game {
 			
 			//is the spot out of bounds?
 			if (outOfHorizontalBounds || outOfVerticalBounds) {
+				character.die();
 				return true;
 			}
 			// is the spot occupied
 			else if (grid[horizontalSpot][verticalSpot] != null) {
+				if (grid[horizontalSpot][verticalSpot].isCharacter()) {
+					if (Math.abs(180 - char1.getAngle()) == (double)char2.getAngle() || Math.abs(180 - char2.getAngle()) == (double)char1.getAngle()) {
+						char1.die();
+						char2.die();
+						return true;
+					}
+				}
+				
 				System.out.println(" Collided!");
 				return true;
 			}
@@ -230,16 +276,25 @@ public class Game {
 	 * @return the winner of game.
 	 */
 	public int findWinner() {
-		if (char1.returnLifeStatus()) {
-			return 1;
+		// return who won
+		// 0 = tie
+		// 1 = Character 1
+		// 2 = Character 2
+		if (!char1.isAlive() && !char2.isAlive()) {
+			return 0; // tie
 		}
-		else if (char2.returnLifeStatus()) {
+		if (!char1.isAlive()) {
 			return 2;
 		}
-		return 0;
+		if (!char2.isAlive()) {
+			return 1;
+		}
+		return -1; // should not be reached if this method is called whenever the game ends
 	}
 	
-	//should move these methods into Character.java later
+	public Boolean isGameEnded() {
+		return ended;
+	}
 	
 	/**
 	 * Method to get the row value of the first character.
