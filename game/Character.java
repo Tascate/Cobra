@@ -36,19 +36,12 @@ public class Character extends FieldObject {
 	public void die() {
 		alive = false;
 	}
-	/**
-	 *Method to return the speed of the character.
-	 *@return speed of characterr.
-	 */
-	public int returnSpeed() {
-		return speed;
-	}
 	
 	/**
 	 *Boolean method to return the life status of the character, whether the character is still alive or has died.
 	 *@return whether the character is still alive or not(true if it is, false otherwise).
 	 */
-	public boolean returnLifeStatus() {
+	public boolean isAlive() {
 		return alive;
 	}
 	
