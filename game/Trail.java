@@ -11,6 +11,8 @@ public class Trail extends FieldObject {
 	
 	/**
 	 * Trail constructor to construct the trail of the player and set length to 7 and width to 1.
+	 * @param givenRow - given row
+	 * @param givenColumn - given column
 	 * @param c - color
 	 * @param a - angle
          */	
