@@ -18,9 +18,9 @@ public class AI extends Character {
 		wins = 0;
 	}
 	//2D boolean (true/false) array
-	boolean map[][] = new boolean[20][20];
+	boolean map[][];
 	//this represents the position of the AI on the map
-	int x = 10, y = 10;
+	int x, y;
 	//this int will be 1 - 4 and will represent a direction
 	//1 - up
 	//2 - right
@@ -33,15 +33,21 @@ public class AI extends Character {
 	* @param startX - starting column position
 	* @param startY - starting row position
 	*/
-	void init(int startX, int startY){
+	void init(FieldObject[][] grid){
 	    //set the x and y to a starting position
-	    x = startX;
-	    y = startY;
+	    x = row;
+	    y = col;
 	    //this will set the entire array to false
+	    map = new boolean [grid.length][grid[0].length];
 	    int i = 0, j = 0;
-	    while (i<20){
-	        while(j<20){
-	            map[i][j] = false;
+	    while (i<grid.length){
+	        while(j<grid[0].length){
+	        	if (grid[i][j] == null) {
+	        		map[i][j] = false;
+	        	}
+	        	else {
+	        		map[i][j] = true;
+	        	}
 	            j++;
 	        }
 	        j = 0;
@@ -61,27 +67,27 @@ public class AI extends Character {
 	        //it cannot because it would be out of bounds
 	        switch(direction){
 	        case 1: //up
-	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
-	                map[x][y-1] = true;
-	                y--;
+	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+	                map[x][y+1] = true;
+	                setAngle(90);
 	            }
 	            return;
 	        case 2: //right
 	            if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
 	                map[x+1][y] = true;
-	                x++;
+	                setAngle(0);
 	            }
 	            return;
 	        case 3: //down
-	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
-	                map[x][y+1] = true;
-	                y++;
+	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+	                map[x][y-1] = true;
+	                setAngle(270);
 	            }
 	            return;
 	        case 4: //left
 	            if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
 	                map[x-1][y] = true;
-	                x--;
+	                setAngle(180);
 	            }
 	            return;
 	        }
@@ -102,7 +108,7 @@ public class AI extends Character {
 	        //it cannot because it would be out of bounds
 	        switch(direction){
 	        case 1: //up
-	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
 	                canGoLeft = true;
 	            }else canGoLeft = false;
 	            break;
@@ -112,7 +118,7 @@ public class AI extends Character {
 	            }else canGoLeft = false;
 	            break;
 	        case 3: //down
-	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
 	                canGoLeft = true;
 	            }else canGoLeft = false;
 	            break;
@@ -136,7 +142,7 @@ public class AI extends Character {
 	        //it cannot because it would be out of bounds
 	        switch(direction){
 	        case 1: //up
-	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
 	                canGoRight = true;
 	            }else canGoRight = false;
 	            break;
@@ -146,7 +152,7 @@ public class AI extends Character {
 	            }else canGoRight = false;
 	            break;
 	        case 3: //down
-	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
 	                canGoRight = true;
 	            }else canGoRight = false;
 	            break;
@@ -166,69 +172,69 @@ public class AI extends Character {
 	        try{
 	            //try to go straight and will error if 
 	            //it cannot because it would be out of bounds
-	            switch(direction){
-	            case 1: //up
-	                if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
-	                    map[x][y-1] = true;
-	                    y--;
-	                }
-	                return;
-	            case 2: //right
-	                if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
-	                    map[x+1][y] = true;
-	                    x++;
-	                }
-	                return;
-	            case 3: //down
-	                if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
-	                    map[x][y+1] = true;
-	                    y++;
-	                }
-	                return;
-	            case 4: //left
-	                if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
-	                    map[x-1][y] = true;
-	                    x--;
-	                }
-	                return;
-	            }
-	        }catch(Exception e){
+	        	switch(direction){
+		        case 1: //up
+		            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+		                map[x][y+1] = true;
+		                setAngle(90);
+		            }
+		            return;
+		        case 2: //right
+		            if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
+		                map[x+1][y] = true;
+		                setAngle(0);
+		            }
+		            return;
+		        case 3: //down
+		            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+		                map[x][y-1] = true;
+		                setAngle(270);
+		            }
+		            return;
+		        case 4: //left
+		            if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
+		                map[x-1][y] = true;
+		                setAngle(180);
+		            }
+		            return;
+		        }
+		    }catch(Exception e){
 
-	        }
+		    }
 	    }else if(!canGoLeft&&canGoRight){//can only go right
 	        direction++;
 	        try{
 	            //try to go straight and will error if 
 	            //it cannot because it would be out of bounds
-	            switch(direction){
-	            case 1: //up
-	                if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
-	                    map[x][y-1] = true;
-	                    y--;
-	                }
-	                return;
-	            case 2: //right
-	                if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
-	                    map[x+1][y] = true;
-	                    x++;
-	                }
-	                return;
-	            case 3: //down
-	                if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
-	                    map[x][y+1] = true;
-	                    y++;
-	                }
-	                return;
-	            case 4: //left
-	                if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
-	                    map[x-1][y] = true;
-	                    x--;
-	                }
-	                return;
-	            }
-	        }catch(Exception e){
+	        	switch(direction){
+		        case 1: //up
+		            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+		                map[x][y+1] = true;
+		                setAngle(90);
+		            }
+		            return;
+		        case 2: //right
+		            if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
+		                map[x+1][y] = true;
+		                setAngle(0);
+		            }
+		            return;
+		        case 3: //down
+		            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+		                map[x][y-1] = true;
+		                setAngle(270);
+		            }
+		            return;
+		        case 4: //left
+		            if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
+		                map[x-1][y] = true;
+		                setAngle(180);
+		            }
+		            return;
+		        }
+		    }catch(Exception e){
 
-	        }
+		    }
 	    }else if(canGoLeft&&canGoRight){//can go either way so it will pick randomly
 	        if(System.currentTimeMillis()%2==0){//random, will be true half of the time and false the other half
 	            //change direction one anticlockwise
@@ -236,70 +242,70 @@ public class AI extends Character {
 	            try{
 	                //try to go straight and will error if 
 	                //it cannot because it would be out of bounds
-	                switch(direction){
-	                case 1: //up
-	                    if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
-	                        map[x][y-1] = true;
-	                        y--;
-	                    }
-	                    return;
-	                case 2: //right
-	                    if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
-	                        map[x+1][y] = true;
-	                        x++;
-	                    }
-	                    return;
-	                case 3: //down
-	                    if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
-	                        map[x][y+1] = true;
-	                        y++;
-	                    }
-	                    return;
-	                case 4: //left
-	                    if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
-	                        map[x-1][y] = true;
-	                        x--;
-	                    }
-	                    return;
-	                }
-	            }catch(Exception e){
+	            	switch(direction){
+	    	        case 1: //up
+	    	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+	    	                map[x][y+1] = true;
+	    	                setAngle(90);
+	    	            }
+	    	            return;
+	    	        case 2: //right
+	    	            if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
+	    	                map[x+1][y] = true;
+	    	                setAngle(0);
+	    	            }
+	    	            return;
+	    	        case 3: //down
+	    	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+	    	                map[x][y-1] = true;
+	    	                setAngle(270);
+	    	            }
+	    	            return;
+	    	        case 4: //left
+	    	            if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
+	    	                map[x-1][y] = true;
+	    	                setAngle(180);
+	    	            }
+	    	            return;
+	    	        }
+	    	    }catch(Exception e){
 
-	            }
+	    	    }
 	        }else{
 	            //change direction one clockwise
 	            direction++;
 	            try{
 	                //try to go straight and will error if 
 	                //it cannot because it would be out of bounds
-	                switch(direction){
-	                case 1: //up
-	                    if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
-	                        map[x][y-1] = true;
-	                        y--;
-	                    }
-	                    return;
-	                case 2: //right
-	                    if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
-	                        map[x+1][y] = true;
-	                        x++;
-	                    }
-	                    return;
-	                case 3: //down
-	                    if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
-	                        map[x][y+1] = true;
-	                        y++;
-	                    }
-	                    return;
-	                case 4: //left
-	                    if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
-	                        map[x-1][y] = true;
-	                        x--;
-	                    }
-	                    return;
-	                }
-	            }catch(Exception e){
+	            	switch(direction){
+	    	        case 1: //up
+	    	            if(!map[x][y+1]){ //will error out here if the block in front is out of bounds
+	    	                map[x][y+1] = true;
+	    	                setAngle(90);
+	    	            }
+	    	            return;
+	    	        case 2: //right
+	    	            if(!map[x+1][y]){ //will error out here if the block in front is out of bounds
+	    	                map[x+1][y] = true;
+	    	                setAngle(0);
+	    	            }
+	    	            return;
+	    	        case 3: //down
+	    	            if(!map[x][y-1]){ //will error out here if the block in front is out of bounds
+	    	                map[x][y-1] = true;
+	    	                setAngle(270);
+	    	            }
+	    	            return;
+	    	        case 4: //left
+	    	            if(!map[x-1][y]){ //will error out here if the block in front is out of bounds
+	    	                map[x-1][y] = true;
+	    	                setAngle(180);
+	    	            }
+	    	            return;
+	    	        }
+	    	    }catch(Exception e){
 
-	            }
+	    	    }
 	        }
 	    }
 	}
