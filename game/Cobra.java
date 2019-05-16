@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -13,8 +16,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
  */
 public class Cobra extends ApplicationAdapter {
 	ShapeRenderer shapeRender;
+	Texture pauseTexture;
+	Texture tieTexture;
+	SpriteBatch spriteBatch;
+	BitmapFont font;
+	
 	Game round;
 	int fps;
+
 	float scale;
 	int startX;
 	int startY;
@@ -41,6 +50,11 @@ public class Cobra extends ApplicationAdapter {
 	 */
 	public void create() {
 		shapeRender = new ShapeRenderer();
+		spriteBatch = new SpriteBatch();
+		font = new BitmapFont();
+		pauseTexture = new Texture(Gdx.files.internal("paused.png"));
+		tieTexture = new Texture(Gdx.files.internal("tie,png"));
+		
 		secondPlayer = false;
 		round = new Game(300,225, secondPlayer);
 		scale = 2.0f;
@@ -75,6 +89,7 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.end();
 		
 		//Draw Light Trails for character in game
+		if (!round.isPaused() || System.currentTimeMillis() % 100 == 0) {
 		shapeRender.begin(ShapeType.Filled);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
@@ -87,6 +102,7 @@ public class Cobra extends ApplicationAdapter {
 		}
 		shapeRender.end();
 		
+		
 		//Draw Player One
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
@@ -98,6 +114,18 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.setColor(Color.RED);
 		shapeRender.circle(startX+(round.getChar2Row()*scale)+1, (startY+round.getChar2Col()*scale)+1, scale);
 		shapeRender.end();
+		}
+		
+		if (round.isPaused()) {
+			spriteBatch.begin();
+			spriteBatch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/2, Gdx.graphics.getHeight()/2 - texture.getHeight()/2);
+			spriteBatch.end();
+		}
+		if (round.isGameEnded()) {
+			switch (findWinner()) {
+				
+			}
+		}
 	}
 	
 	@Override
@@ -106,6 +134,9 @@ public class Cobra extends ApplicationAdapter {
 	 */
 	public void dispose () {
 		shapeRender.dispose();
+		spriteBatch.dispose();
+		texture.dispose();
+		font.dispose();
 	}
 	
 	
