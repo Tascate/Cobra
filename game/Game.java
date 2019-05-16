@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.Color;
  * Game class to run the game.
  */
 public class Game {
-	FieldObject[][] grid; //grid of game
-	Character char1; //player 1
-	Character char2; //player 2
-	AI ai;
-	Boolean realOpponent; //whether Player 2 is a Second Player or AI
-	Boolean paused; //check if game is paused or not
-	Boolean ended; //check if game has ended or not
+	private FieldObject[][] grid; //grid of game
+	private Character char1; //player 1
+	private Character char2; //player 2
+	private AI ai;
+	private Boolean realOpponent; //whether Player 2 is a Second Player or AI
+	private Boolean paused; //check if game is paused or not
+	private Boolean ended; //check if game has ended or not
+	final private int MAX_TRAIL_LENGTH;
 	
 	/**
 	 * Game constructor to create the game with the rows and columns; the grid of the game. It
@@ -24,11 +25,12 @@ public class Game {
 	 * @param cols - cols of grid of game
 	 * @param twoPlayer - if the 2nd player is an AI or not
 	 */
-	public Game(int rows, int cols, Boolean twoPlayer) {
+	public Game(int rows, int cols, Boolean twoPlayers) {
 		grid = new FieldObject[rows][cols];
 		paused = false;
 		ended = false;
-		realOpponent = true;
+		realOpponent = twoPlayers;
+		MAX_TRAIL_LENGTH = 30;
 		
 		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
@@ -56,7 +58,7 @@ public class Game {
 				ai.init(grid);
 				ai.tick();
 			}
-			moveChar(char2);
+			
 		}
 	}
 	
@@ -67,41 +69,52 @@ public class Game {
 	 */
 	private void checkForInput() {
 		//Player 1's Input
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+		boolean gotInput = false;
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !gotInput){
 			if (!(char1.getAngle() == 0))
-            char1.setAngle(180);;
+            char1.setAngle(180);
+			gotInput = true;
         }
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !gotInput){
 			if (!(char1.getAngle() == 180))
             char1.setAngle(0);
+			gotInput = true;
         }
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !gotInput){
 			if (!(char1.getAngle() == 270)) 
             char1.setAngle(90);
+			gotInput = true;
         }
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN) && !gotInput){
 			if (!(char1.getAngle() == 90)) {
 				char1.setAngle(270);
+				gotInput = true;
 			}
         }
 		
 		//Player 2's Input if not a CPU
 		if (realOpponent) {
-			if(Gdx.input.isKeyPressed(Input.Keys.A)){
+			gotInput = false;
+			if(Gdx.input.isKeyPressed(Input.Keys.A) && !gotInput){
 				if (!(char2.getAngle() == 0))
-					char2.setAngle(180);;
+					char2.setAngle(180);
+					gotInput = true;
         		}
-			if(Gdx.input.isKeyPressed(Input.Keys.D)){
+			if(Gdx.input.isKeyPressed(Input.Keys.D) && !gotInput){
 				if (!(char2.getAngle() == 180))
 					char2.setAngle(0);
+					gotInput = true;
         		}
-			if(Gdx.input.isKeyPressed(Input.Keys.W)){
+			if(Gdx.input.isKeyPressed(Input.Keys.W) && !gotInput){
 				if (!(char2.getAngle() == 270)) 
 					char2.setAngle(90);
+					gotInput = true;
         		}
-			if(Gdx.input.isKeyPressed(Input.Keys.S)){
+			if(Gdx.input.isKeyPressed(Input.Keys.S) && !gotInput){
 				if (!(char2.getAngle() == 90)) {
 					char2.setAngle(270);
+					gotInput = true;
 				}
         		}
 		}
@@ -163,19 +176,21 @@ public class Game {
 		
 		if (!collision) {
 			// System.out.print(" Movement!");
-			int movedHorizontalSpots = calcHorizontal(character)*character.getSpeed();
-			int movedVerticalSpots = calcVertical(character)*character.getSpeed();
+			int angle = character.getAngle();
+			int movedHorizontalSpots = calcHorizontal(angle)*character.getSpeed();
+			int movedVerticalSpots = calcVertical(angle)*character.getSpeed();
 			
 			grid[row+movedHorizontalSpots][col+movedVerticalSpots] = character;
 			
 			for(int i = 0; i < char1.getSpeed(); i++) {
-				int horizontalSpot = row+(calcHorizontal(character)*i);
-				int verticalSpot = col+(calcVertical(character)*i);
+				int horizontalSpot = row+(calcHorizontal(angle)*i);
+				int verticalSpot = col+(calcVertical(angle)*i);
 				grid[horizontalSpot][verticalSpot] = character.leaveTrail(horizontalSpot, verticalSpot);
 			}
 			
 			character.setRow(row += movedHorizontalSpots);
 			character.setCol(col += movedVerticalSpots);
+			checkForExcessTrail();
 			System.out.println();
 		}
 		else {
@@ -196,8 +211,8 @@ public class Game {
 		//check each spot the player will pass
 		// if occupied return true
 		for(int i = 1; i <= character.getSpeed(); i++) {
-			int horizontalSpot = playerRow+(calcHorizontal(character)*i);
-			int verticalSpot = playerCol+(calcVertical(character)*i);
+			int horizontalSpot = playerRow+(calcHorizontal(character.getAngle())*i);
+			int verticalSpot = playerCol+(calcVertical(character.getAngle())*i);
 			boolean outOfHorizontalBounds = horizontalSpot >= grid.length || horizontalSpot < 0;
 			boolean outOfVerticalBounds = verticalSpot >= grid[0].length || verticalSpot < 0;
 			//System.out.print("Collision Detection:" + horizontalSpot + "," + verticalSpot + " ");
@@ -228,15 +243,39 @@ public class Game {
 		System.out.print(" Unoccupied! ");
 		return false;
 	}
+	
+	public void checkForExcessTrail() {
+		if (char1.getTrailLength() > MAX_TRAIL_LENGTH) {
+			removeExcessTrail(char1);
+		}
+		if (char2.getTrailLength() > MAX_TRAIL_LENGTH) {
+			removeExcessTrail(char2);
+		}
+	}
+	
+	public void removeExcessTrail(Character character) {
+		//Get Tail Details
+		int row = character.getTailRow();
+		int col = character.getTailCol();
+		int angle = grid[row][col].getAngle();
+		
+		//Find the new Tail
+		character.setTailRow(row+(calcHorizontal(angle)));
+		character.setTailCol(col+(calcVertical(angle)));
+		
+		//Remove the old Tail
+		grid[row][col] = null;
+		character.decrementTrailLength();
+	}
 		
 	/**
 	 * Method to calculate and return the vertical directions the player is moving in.
 	 * @param character - character in the game.
 	 * @return 1 if angle is 90, -1 if angle is 270, and default is 0.
 	 */
-	private int calcVertical(FieldObject character) {
+	private int calcVertical(int angle) {
 		//Calculates the vertical direction the player is moving in
-		switch (character.getAngle()) {
+		switch (angle) {
 			case 90:
 				return 1;
 			case 270:
@@ -251,9 +290,9 @@ public class Game {
 	 * @param character - character in the game
 	 * @return 1 if angle is 0, -1 if angle is 180, and default is 0.
 	 */
-	private int calcHorizontal(FieldObject character) {
+	private int calcHorizontal(int angle) {
 		//Returns the horizontal direction the player is moving in
-		switch (character.getAngle()) {
+		switch (angle) {
 			case 0:
 				return 1;
 			case 180:
