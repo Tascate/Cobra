@@ -25,7 +25,9 @@ public class Character extends FieldObject {
 	
 	/**
 	 * Trail method to return the trail that is left behind from the character when the character is currently moving.
-	 *@return the trail left behind from the character along with their color and angle at which they are moving.
+	 * @param row - row number
+	 * @param col - column number
+	 * @return the trail left behind from the character along with their color and angle at which they are moving.
 	 */
 	public Trail leaveTrail(int row, int col) {
 		return new Trail(row, col, light, angle);
