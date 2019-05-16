@@ -7,31 +7,68 @@ import com.badlogic.gdx.graphics.Color;
 public class Character extends FieldObject {
 	protected boolean alive;
 	
+	protected int rowOfTail;
+	protected int colOfTail;
+	protected boolean noTail;
+	
+	protected int trailLength;
+	
 	/**
 	* Constructor to initialize the instance variable to the passed in values to make the character and add their features.
 	*@param s - speed of character
 	*@param c - color of the character
 	*@param a - angle for where the character is changing directions, whether it's going up, down, left, or right.
 	*/
-	public Character(int theRow, int theColumn, int s, Color c, int a) {
+	public Character(int theRow, int theColumn, int s, Color c, int direction) {
 		row = theRow;
 		col = theColumn;
-		
 		speed = s;
 		light = c;
-		angle = a;
+		angle = direction;
+		
+		noTail = true;
 		alive = true;
+		trailLength = 0;
 	}
 	
 	/**
 	 * Trail method to return the trail that is left behind from the character when the character is currently moving.
-	 * @param row - row number
-	 * @param col - column number
-	 * @return the trail left behind from the character along with their color and angle at which they are moving.
+	 *@return the trail left behind from the character along with their color and angle at which they are moving.
 	 */
 	public Trail leaveTrail(int row, int col) {
+		if (noTail) {
+			rowOfTail = row;
+			colOfTail = col;
+			noTail = false;
+		}
+		trailLength++;
 		return new Trail(row, col, light, angle);
 	}
+	
+	public int getTailRow() {
+		return rowOfTail;
+	}
+	
+	public int getTailCol() {
+		return colOfTail;
+	}
+	
+	public void setTailRow(int row) {
+		rowOfTail = row;
+	}
+	
+	public void setTailCol(int col) {
+		colOfTail = col;
+	}
+	
+	public int getTrailLength() {
+		return trailLength;
+	}
+	
+	public void decrementTrailLength() {
+		trailLength--;
+	}
+	
 	/**
 	 * Method to set the boolean instance variable alive to false, indicating that the character has died.		
 	 */
