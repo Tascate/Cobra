@@ -30,7 +30,7 @@ public class Game {
 		paused = false;
 		ended = false;
 		realOpponent = twoPlayers;
-		MAX_TRAIL_LENGTH = 30;
+		MAX_TRAIL_LENGTH = 100;
 		
 		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
@@ -58,7 +58,7 @@ public class Game {
 				ai.init(grid);
 				ai.tick();
 			}
-			
+			moveChar(char2);
 		}
 	}
 	
@@ -333,6 +333,10 @@ public class Game {
 	
 	public Boolean isGameEnded() {
 		return ended;
+	}
+	
+	public Boolean isPaused() {
+		return paused;
 	}
 	
 	/**
