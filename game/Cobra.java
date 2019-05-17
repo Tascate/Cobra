@@ -23,11 +23,17 @@ public class Cobra extends ApplicationAdapter {
 	
 	Game round;
 	int fps;
+	float brightness;
 
 	float scale;
 	int startX;
 	int startY;
 	boolean secondPlayer;
+	
+	int state;
+	// What state is the Game in
+	// state = 0 -> Menus
+	// state = 1 -> Game
 	
 	/**
 	 * Default cobra constructor.
@@ -53,8 +59,9 @@ public class Cobra extends ApplicationAdapter {
 		spriteBatch = new SpriteBatch();
 		font = new BitmapFont();
 		pauseTexture = new Texture(Gdx.files.internal("paused.png"));
-		tieTexture = new Texture(Gdx.files.internal("tie,png"));
+		tieTexture = new Texture(Gdx.files.internal("tie.png"));
 		
+		brightness = 1;
 		secondPlayer = false;
 		round = new Game(300,225, secondPlayer);
 		scale = 2.0f;
@@ -79,6 +86,10 @@ public class Cobra extends ApplicationAdapter {
 		else if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
 			reset();
 		}
+		drawGrid();
+	}
+	
+	private void drawGrid() {
 		int length = round.getGrid().length;
 		int width = round.getGrid()[0].length;
 		
@@ -89,7 +100,7 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.end();
 		
 		//Draw Light Trails for character in game
-		if (!round.isPaused() || System.currentTimeMillis() % 100 == 0) {
+		if (!round.isPaused() || round.blinkPlayerWhenPaused()) {
 		shapeRender.begin(ShapeType.Filled);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
@@ -118,12 +129,16 @@ public class Cobra extends ApplicationAdapter {
 		
 		if (round.isPaused()) {
 			spriteBatch.begin();
-			spriteBatch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/2, Gdx.graphics.getHeight()/2 - texture.getHeight()/2);
+			spriteBatch.draw(pauseTexture, Gdx.graphics.getWidth()/2 - pauseTexture.getWidth()/2, Gdx.graphics.getHeight()/2 - pauseTexture.getHeight()/2);
 			spriteBatch.end();
 		}
 		if (round.isGameEnded()) {
-			switch (findWinner()) {
-				
+			switch (round.findWinner()) {
+			case 0:
+				spriteBatch.begin();
+				spriteBatch.draw(tieTexture, Gdx.graphics.getWidth()/2 - tieTexture.getWidth()/2, Gdx.graphics.getHeight()/2 - tieTexture.getHeight()/2);
+				spriteBatch.end();
+				break;
 			}
 		}
 	}
@@ -135,7 +150,8 @@ public class Cobra extends ApplicationAdapter {
 	public void dispose () {
 		shapeRender.dispose();
 		spriteBatch.dispose();
-		texture.dispose();
+		pauseTexture.dispose();
+		tieTexture.dispose();
 		font.dispose();
 	}
 	
