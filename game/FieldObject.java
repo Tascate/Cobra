@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 public abstract class FieldObject {
 	protected Color light; //color of character
-	protected int angle; //angle of character, where they changed directions
-	protected int speed; //speed of character
+	protected int angle; //angle of fieldObject, where they changed directions
 	protected int row; //row of the FieldObject
 	protected int col; //column of the FieldObject
 	
@@ -29,14 +28,6 @@ public abstract class FieldObject {
 	}
 	
 	/**
-	 * Method to get the speed of character.
-	 * @return speed of character
-	 */
-	public int getSpeed() {
-		return speed;
-	}
-	
-	/**
 	 * Method to set the color of character to the passed in color.
 	 * @param c - color
 	 */
@@ -50,13 +41,6 @@ public abstract class FieldObject {
          */	
 	public void setAngle(int a) {
 		angle = a;
-	}
-	/**
-	* Method that sets the speed of the character passed in value.
-	* @param s - speed value
-	*/
-	public void setSpeed(int s) {
-		speed = s;
 	}
 	
 	/**
@@ -97,6 +81,4 @@ public abstract class FieldObject {
 	 * @return true if it's a character, false otherwise
 	 */
 	public abstract boolean isCharacter();
-	
-	
 }
