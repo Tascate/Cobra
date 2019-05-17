@@ -46,11 +46,11 @@ public class Game {
 		seconds = 0;
 		minutes = 0;
 		
-		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
+		char1 = new Character(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
 		
 		if (realOpponent) {
-			char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
+			char2 = new Character(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
 		}
 		else {
 			ai = new AI(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 0);
