@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class Character extends FieldObject {
 	protected boolean alive;
+	protected int speed; //speed of character
+	protected int nextActionableFrame; 
+	protected double trailMultiplier;
 	
 	protected int rowOfTail;
 	protected int colOfTail;
 	protected boolean noTail;
-	
 	protected int trailLength;
 	
 	/**
@@ -25,6 +27,8 @@ public class Character extends FieldObject {
 		speed = s;
 		light = c;
 		angle = direction;
+		nextActionableFrame = 1;
+		trailMultiplier = 1;
 		
 		noTail = true;
 		alive = true;
@@ -74,6 +78,38 @@ public class Character extends FieldObject {
 	 */
 	public void die() {
 		alive = false;
+	}
+	
+	public void setNextActionableFrame(int frame) {
+		nextActionableFrame = frame;
+	}
+	
+	public int getNextActionableFrame() {
+		return nextActionableFrame;
+	}
+	
+	public void setTrailMultiplier(int multiplier) {
+		trailMultiplier = multiplier;
+	}
+	
+	public double getTrailMultiplier() {
+		return trailMultiplier;
+	}
+	
+	/**
+	 * Method to get the speed of character.
+	 * @return speed of character
+	 */
+	public int getSpeed() {
+		return speed;
+	}
+	
+	/**
+	* Method that sets the speed of the character passed in value.
+	* @param s - speed value
+	*/
+	public void setSpeed(int s) {
+		speed = s;
 	}
 	
 	/**
