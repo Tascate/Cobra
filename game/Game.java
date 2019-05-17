@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -19,9 +20,9 @@ public class Game {
 	private Boolean ended; //check if game has ended or not
 	private int maxTrailLength;
 	
-	
-	
-	private Random rand; 
+	private Item currentItem;
+	private Boolean itemQueued;
+	private Random rand;
 	
 	int currentFrame;
 	private int seconds;
@@ -37,6 +38,7 @@ public class Game {
 	 */
 	public Game(int rows, int cols, Boolean twoPlayers) {
 		grid = new FieldObject[rows][cols];
+		rand = new Random();
 		paused = false;
 		ended = false;
 		realOpponent = twoPlayers;
@@ -333,6 +335,28 @@ public class Game {
 			default:
 				return 0;
 		}
+	}
+	
+	public boolean queueItem() {
+		if (!itemQueued) {
+			int row = rand.nextInt(grid.length);
+			int col = rand.nextInt(grid[0].length);
+			if (rand.nextInt(2) == 1) {
+				currentItem= new Item(rand.nextInt(4), row, col);
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+		
+	
+	public boolean spawnItem() {
+		if (grid[currentItem.getRow()][currentItem.getCol()] == null) {
+			grid[currentItem.getRow()][currentItem.getCol()] = currentItem;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
