@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +17,15 @@ public class Game {
 	private Boolean realOpponent; //whether Player 2 is a Second Player or AI
 	private Boolean paused; //check if game is paused or not
 	private Boolean ended; //check if game has ended or not
-	final private int MAX_TRAIL_LENGTH;
+	private int maxTrailLength;
+	
+	
+	
+	private Random rand; 
+	
+	int currentFrame;
+	private int seconds;
+	private int minutes;
 	
 	/**
 	 * Game constructor to create the game with the rows and columns; the grid of the game. It
@@ -30,7 +40,11 @@ public class Game {
 		paused = false;
 		ended = false;
 		realOpponent = twoPlayers;
-		MAX_TRAIL_LENGTH = 100;
+		maxTrailLength = 90;
+		
+		currentFrame = 0;
+		seconds = 0;
+		minutes = 0;
 		
 		char1 = new Player(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
 		grid[rows * 1/8][cols * 1/2] = char1;
@@ -39,7 +53,7 @@ public class Game {
 			char2 = new Player(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
 		}
 		else {
-			ai = new AI(rows - (rows * 1/6), cols * 1/4, 1,new Color(1,0,0,1), 0);
+			ai = new AI(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 0);
 			char2 = ai;
 		}
 		
@@ -51,14 +65,31 @@ public class Game {
 	 * and just continue to move the player.
 	 */
 	public void progressGame() {
-		checkForInput();
-		if (!paused && !ended) {
-			moveChar(char1);
-			if (!realOpponent) {
-				ai.init(grid);
-				ai.tick();
+		currentFrame++;
+		if (currentFrame > 60) {
+			currentFrame = 0;
+			seconds++;
+			if (seconds > 60) {
+				seconds = 0;
+				minutes++;
+				if (minutes > 99) {
+					minutes = 0;
+				}
 			}
-			moveChar(char2);
+		}
+		checkForOtherInput();
+		if (!paused && !ended) {
+			checkForGameInput();
+			if (seconds % char1.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
+				moveChar(char1);
+			}
+			if (seconds % char2.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
+				if (!realOpponent) {
+					ai.init(grid);
+					ai.tick();
+				}
+				moveChar(char2);
+			}
 		}
 	}
 	
@@ -67,7 +98,7 @@ public class Game {
 	 * is that the character is not allowed to automatically turn backwards. If the player tries to turn backwards,
 	 * it will not work and the character will just keep going that way.
 	 */
-	private void checkForInput() {
+	private void checkForGameInput() {
 		//Player 1's Input
 		boolean gotInput = false;
 		
@@ -116,9 +147,11 @@ public class Game {
 					char2.setAngle(270);
 					gotInput = true;
 				}
-        		}
+        	}
 		}
-		
+	}
+	
+	private void checkForOtherInput() {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 			pauseGame();
 		}
@@ -177,14 +210,14 @@ public class Game {
 		if (!collision) {
 			// System.out.print(" Movement!");
 			int angle = character.getAngle();
-			int movedHorizontalSpots = calcHorizontal(angle)*character.getSpeed();
-			int movedVerticalSpots = calcVertical(angle)*character.getSpeed();
+			int movedHorizontalSpots = calcHorizontalMultiplier(angle)*character.getSpeed();
+			int movedVerticalSpots = calcVerticalMultiplier(angle)*character.getSpeed();
 			
 			grid[row+movedHorizontalSpots][col+movedVerticalSpots] = character;
 			
 			for(int i = 0; i < char1.getSpeed(); i++) {
-				int horizontalSpot = row+(calcHorizontal(angle)*i);
-				int verticalSpot = col+(calcVertical(angle)*i);
+				int horizontalSpot = row+(calcHorizontalMultiplier(angle)*i);
+				int verticalSpot = col+(calcVerticalMultiplier(angle)*i);
 				grid[horizontalSpot][verticalSpot] = character.leaveTrail(horizontalSpot, verticalSpot);
 			}
 			
@@ -211,8 +244,8 @@ public class Game {
 		//check each spot the player will pass
 		// if occupied return true
 		for(int i = 1; i <= character.getSpeed(); i++) {
-			int horizontalSpot = playerRow+(calcHorizontal(character.getAngle())*i);
-			int verticalSpot = playerCol+(calcVertical(character.getAngle())*i);
+			int horizontalSpot = playerRow+(calcHorizontalMultiplier(character.getAngle())*i);
+			int verticalSpot = playerCol+(calcVerticalMultiplier(character.getAngle())*i);
 			boolean outOfHorizontalBounds = horizontalSpot >= grid.length || horizontalSpot < 0;
 			boolean outOfVerticalBounds = verticalSpot >= grid[0].length || verticalSpot < 0;
 			//System.out.print("Collision Detection:" + horizontalSpot + "," + verticalSpot + " ");
@@ -245,10 +278,10 @@ public class Game {
 	}
 	
 	public void checkForExcessTrail() {
-		if (char1.getTrailLength() > MAX_TRAIL_LENGTH) {
+		if (char1.getTrailLength() > (int)maxTrailLength * char1.getTrailMultiplier()) {
 			removeExcessTrail(char1);
 		}
-		if (char2.getTrailLength() > MAX_TRAIL_LENGTH) {
+		if (char2.getTrailLength() > (int)maxTrailLength * char2.getTrailMultiplier()) {
 			removeExcessTrail(char2);
 		}
 	}
@@ -260,8 +293,8 @@ public class Game {
 		int angle = grid[row][col].getAngle();
 		
 		//Find the new Tail
-		character.setTailRow(row+(calcHorizontal(angle)));
-		character.setTailCol(col+(calcVertical(angle)));
+		character.setTailRow(row+(calcHorizontalMultiplier(angle)));
+		character.setTailCol(col+(calcVerticalMultiplier(angle)));
 		
 		//Remove the old Tail
 		grid[row][col] = null;
@@ -273,7 +306,7 @@ public class Game {
 	 * @param character - character in the game.
 	 * @return 1 if angle is 90, -1 if angle is 270, and default is 0.
 	 */
-	private int calcVertical(int angle) {
+	private int calcVerticalMultiplier(int angle) {
 		//Calculates the vertical direction the player is moving in
 		switch (angle) {
 			case 90:
@@ -290,7 +323,7 @@ public class Game {
 	 * @param character - character in the game
 	 * @return 1 if angle is 0, -1 if angle is 180, and default is 0.
 	 */
-	private int calcHorizontal(int angle) {
+	private int calcHorizontalMultiplier(int angle) {
 		//Returns the horizontal direction the player is moving in
 		switch (angle) {
 			case 0:
@@ -337,6 +370,10 @@ public class Game {
 	
 	public Boolean isPaused() {
 		return paused;
+	}
+	
+	public Boolean blinkPlayerWhenPaused() {
+		return seconds % 2 == 0;
 	}
 	
 	/**
