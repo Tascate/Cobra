@@ -14,7 +14,7 @@ public class Game {
 	private FieldObject[][] grid; //grid of game
 	private Character char1; //player 1
 	private Character char2; //player 2
-	private AI ai;
+	private TestAI ai;
 	private Boolean realOpponent; //whether Player 2 is a Second Player or AI
 	private Boolean paused; //check if game is paused or not
 	private Boolean ended; //check if game has ended or not
@@ -41,6 +41,7 @@ public class Game {
 		rand = new Random();
 		paused = false;
 		ended = false;
+		itemQueued = false;
 		realOpponent = twoPlayers;
 		maxTrailLength = 90;
 		
@@ -48,14 +49,14 @@ public class Game {
 		seconds = 0;
 		minutes = 0;
 		
-		char1 = new Character(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 0);
+		char1 = new Character(rows * 1/8, cols * 1/2, 1,new Color(0,0,1,1), 2);
 		grid[rows * 1/8][cols * 1/2] = char1;
 		
 		if (realOpponent) {
-			char2 = new Character(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 180);
+			char2 = new Character(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 4);
 		}
 		else {
-			ai = new AI(rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 0);
+			ai = new TestAI(grid, rows - (rows * 1/8), cols * 1/2, 1,new Color(1,0,0,1), 4);
 			char2 = ai;
 		}
 		
@@ -87,8 +88,7 @@ public class Game {
 			}
 			if (seconds % char2.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
 				if (!realOpponent) {
-					ai.init(grid);
-					ai.tick();
+					ai.runAI();
 				}
 				moveChar(char2);
 			}
@@ -105,50 +105,40 @@ public class Game {
 		boolean gotInput = false;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !gotInput){
-			if (!(char1.getAngle() == 0))
-            char1.setAngle(180);
+            char1.setDirection(4);
 			gotInput = true;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !gotInput){
-			if (!(char1.getAngle() == 180))
-            char1.setAngle(0);
+            char1.setDirection(2);
 			gotInput = true;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !gotInput){
-			if (!(char1.getAngle() == 270)) 
-            char1.setAngle(90);
+			char1.setDirection(1);
 			gotInput = true;
         }
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN) && !gotInput){
-			if (!(char1.getAngle() == 90)) {
-				char1.setAngle(270);
-				gotInput = true;
-			}
+			char1.setDirection(3);
+			gotInput = true;
         }
 		
 		//Player 2's Input if not a CPU
 		if (realOpponent) {
 			gotInput = false;
 			if(Gdx.input.isKeyPressed(Input.Keys.A) && !gotInput){
-				if (!(char2.getAngle() == 0))
-					char2.setAngle(180);
-					gotInput = true;
-        		}
+				char1.setDirection(4);
+				gotInput = true;
+			}
 			if(Gdx.input.isKeyPressed(Input.Keys.D) && !gotInput){
-				if (!(char2.getAngle() == 180))
-					char2.setAngle(0);
-					gotInput = true;
-        		}
+				char1.setDirection(2);
+				gotInput = true;
+			}
 			if(Gdx.input.isKeyPressed(Input.Keys.W) && !gotInput){
-				if (!(char2.getAngle() == 270)) 
-					char2.setAngle(90);
-					gotInput = true;
-        		}
+				char1.setDirection(1);
+				gotInput = true;
+			}
 			if(Gdx.input.isKeyPressed(Input.Keys.S) && !gotInput){
-				if (!(char2.getAngle() == 90)) {
-					char2.setAngle(270);
-					gotInput = true;
-				}
+				char1.setDirection(3);
+				gotInput = true;
         	}
 		}
 	}
@@ -205,28 +195,41 @@ public class Game {
 		
 		int row = character.getRow();
 		int col = character.getCol();
-		
-		boolean collision = collided(character, row, col);
 		// System.out.print(" Collision: " + collision);
-		
-		if (!collision) {
-			// System.out.print(" Movement!");
-			int angle = character.getAngle();
-			int movedHorizontalSpots = calcHorizontalMultiplier(angle)*character.getSpeed();
-			int movedVerticalSpots = calcVerticalMultiplier(angle)*character.getSpeed();
-			
-			grid[row+movedHorizontalSpots][col+movedVerticalSpots] = character;
-			
-			for(int i = 0; i < char1.getSpeed(); i++) {
-				int horizontalSpot = row+(calcHorizontalMultiplier(angle)*i);
-				int verticalSpot = col+(calcVerticalMultiplier(angle)*i);
-				grid[horizontalSpot][verticalSpot] = character.leaveTrail(horizontalSpot, verticalSpot);
+		if (!collided(character)) {		
+			int speed = character.getSpeed();
+			switch (character.getDirection()) {
+				case 1:
+					character.setCol(col+speed);
+					break;
+				case 2:
+					character.setRow(row+speed);
+					break;
+				case 3:
+					character.setCol(col-speed);
+					break;
+				case 4:
+					character.setRow(row-speed);
+					break;
 			}
 			
-			character.setRow(row += movedHorizontalSpots);
-			character.setCol(col += movedVerticalSpots);
+			for(int i = 0; i < char1.getSpeed(); i++) {
+				switch (character.getDirection()) {
+				case 1:
+					grid[row][col+i] = character.leaveTrail(row, col+i);
+					break;
+				case 2:
+					grid[row+i][col] = character.leaveTrail(row+i, col);
+					break;
+				case 3:
+					grid[row][col-i] = character.leaveTrail(row, col-i);
+					break;
+				case 4:
+					grid[row-i][col] = character.leaveTrail(row-i, col);
+					break;
+				}
+			}
 			checkForExcessTrail();
-			System.out.println();
 		}
 		else {
 			character.die();
@@ -238,48 +241,56 @@ public class Game {
 	 * Check to see each spot that the player will pass in the game. If the spot that the player is going to is occupied,
 	 * the method will return true, meaning that the player has collided and will end the game, false otherwise.
 	 * @param character - player
-	 * @param playerRow - row value of player
-	 * @param playerCol - column value of player
 	 * @return true if spot player went is occupied, false otherwise
 	 */
-	private boolean collided(Character character, int playerRow, int playerCol) {
+	private boolean collided(Character character) {
 		//check each spot the player will pass
 		// if occupied return true
 		for(int i = 1; i <= character.getSpeed(); i++) {
-			int horizontalSpot = playerRow+(calcHorizontalMultiplier(character.getAngle())*i);
-			int verticalSpot = playerCol+(calcVerticalMultiplier(character.getAngle())*i);
-			boolean outOfHorizontalBounds = horizontalSpot >= grid.length || horizontalSpot < 0;
-			boolean outOfVerticalBounds = verticalSpot >= grid[0].length || verticalSpot < 0;
-			//System.out.print("Collision Detection:" + horizontalSpot + "," + verticalSpot + " ");
-			//System.out.print("Horizontal Bounded:" + (!outOfHorizontalBounds) + " ");
-			//System.out.print("Vertical Bounded:" + (!outOfVerticalBounds) + " ");
-			
+			int projectedRow = character.getRow();
+			int projectedCol = character.getCol();
+			switch (character.getDirection()) {
+				case 1:
+					projectedCol += i;
+					break;
+				case 2:
+					projectedRow += i;
+					break;
+				case 3:
+					projectedCol -= i;
+					break;
+				case 4:
+					projectedRow -= i;
+					break;
+			}
+			boolean outOfHorizontalBounds = projectedRow >= grid.length || projectedRow < 0;
+			boolean outOfVerticalBounds = projectedCol >= grid[0].length || projectedCol < 0;
 			//is the spot out of bounds?
 			if (outOfHorizontalBounds || outOfVerticalBounds) {
 				character.die();
 				return true;
 			}
 			// is the spot occupied
-			else if (grid[horizontalSpot][verticalSpot] != null) {
-				if (grid[horizontalSpot][verticalSpot].isCharacter()) {
-					if (Math.abs(180 - char1.getAngle()) == (double)char2.getAngle() || Math.abs(180 - char2.getAngle()) == (double)char1.getAngle()) {
+			else if (isOccupied(projectedRow,projectedCol)) {
+				if (grid[projectedRow][projectedCol].isCharacter()) {
+					if (char1.getDirection() == char2.getOppositeDirection()) {
 						char1.die();
 						char2.die();
 						return true;
 					}
 				}
-				
-				System.out.println(" Collided!");
 				return true;
 			}
 		}
-		
 		//area is in bounds and unoccupied
-		System.out.print(" Unoccupied! ");
 		return false;
 	}
 	
-	public void checkForExcessTrail() {
+	private boolean isOccupied (int row, int col) {
+		return grid[row][col] != null;
+	}
+	
+	private void checkForExcessTrail() {
 		if (char1.getTrailLength() > (int)maxTrailLength * char1.getTrailMultiplier()) {
 			removeExcessTrail(char1);
 		}
@@ -288,53 +299,33 @@ public class Game {
 		}
 	}
 	
-	public void removeExcessTrail(Character character) {
+	private void removeExcessTrail(Character character) {
 		//Get Tail Details
 		int row = character.getTailRow();
 		int col = character.getTailCol();
-		int angle = grid[row][col].getAngle();
+		System.out.println("Direction:" + character.tailDirection + " The row:" + character.getTailRow() + " " + col);
+		//System.out.println(row + " " + col + " " + grid[row][col] == null);
+		int direction = character.tailDirection;
 		
-		//Find the new Tail
-		character.setTailRow(row+(calcHorizontalMultiplier(angle)));
-		character.setTailCol(col+(calcVerticalMultiplier(angle)));
-		
-		//Remove the old Tail
 		grid[row][col] = null;
+		//Find the new Tail
+		switch (direction) {
+			case 1:
+				character.setTailCol(col+1);
+				break;
+			case 2:
+				character.setTailRow(row+1);
+				break;
+			case 3:
+				character.setTailCol(col-1);
+				break;
+			case 4:
+				character.setTailRow(row-1);
+				break;
+		}
+		character.setTailDirection(grid[character.getTailRow()][character.getTailCol()].getDirection());
+		//Remove the old Tail
 		character.decrementTrailLength();
-	}
-		
-	/**
-	 * Method to calculate and return the vertical directions the player is moving in.
-	 * @param character - character in the game.
-	 * @return 1 if angle is 90, -1 if angle is 270, and default is 0.
-	 */
-	private int calcVerticalMultiplier(int angle) {
-		//Calculates the vertical direction the player is moving in
-		switch (angle) {
-			case 90:
-				return 1;
-			case 270:
-				return -1;
-			default:
-				return 0;
-		}
-	}
-	
-	/**
-	 * Method to calculate and return the horizontal direction the player is moving in.
-	 * @param character - character in the game
-	 * @return 1 if angle is 0, -1 if angle is 180, and default is 0.
-	 */
-	private int calcHorizontalMultiplier(int angle) {
-		//Returns the horizontal direction the player is moving in
-		switch (angle) {
-			case 0:
-				return 1;
-			case 180:
-				return -1;
-			default:
-				return 0;
-		}
 	}
 	
 	public boolean queueItem() {
@@ -354,6 +345,9 @@ public class Game {
 	public boolean spawnItem() {
 		if (grid[currentItem.getRow()][currentItem.getCol()] == null) {
 			grid[currentItem.getRow()][currentItem.getCol()] = currentItem;
+			if (!realOpponent) {
+				ai.prioritizeItem(currentItem.getRow(), currentItem.getCol());
+			}
 			return true;
 		}
 		return false;
