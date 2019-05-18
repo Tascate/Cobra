@@ -86,10 +86,13 @@ public class Cobra extends ApplicationAdapter {
 		else if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
 			reset();
 		}
-		drawGrid();
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			reset();
+		}
+		drawGame();
 	}
 	
-	private void drawGrid() {
+	private void drawGame() {
 		int length = round.getGrid().length;
 		int width = round.getGrid()[0].length;
 		
@@ -118,10 +121,7 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
 		shapeRender.circle(startX+(round.getChar1Row()*scale)+1, (startY+round.getChar1Col()*scale)+1, scale);
-		shapeRender.end();
-		
 		//Draw Player Two
-		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.RED);
 		shapeRender.circle(startX+(round.getChar2Row()*scale)+1, (startY+round.getChar2Col()*scale)+1, scale);
 		shapeRender.end();
