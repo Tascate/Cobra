@@ -7,7 +7,11 @@ import com.badlogic.gdx.graphics.Color;
  */
 public abstract class FieldObject {
 	protected Color light; //color of character
-	protected int angle; //angle of fieldObject, where they changed directions
+	protected int direction; //direction of fieldObject, where they changed directions
+	//1 - up
+	//2 - right
+	//3 - down
+	//4 - left
 	protected int row; //row of the FieldObject
 	protected int col; //column of the FieldObject
 	
@@ -21,10 +25,10 @@ public abstract class FieldObject {
 	
 	/**
 	 * Method to return the angle of the character, where they changed directions.
-	 * @return angle of character, which is where they changed directions.
+	 * @return direction of character, which is where they changed directions.
 	 */	
-	public int getAngle() {
-		return angle;
+	public int getDirection() {
+		return direction;
 	}
 	
 	/**
@@ -39,8 +43,76 @@ public abstract class FieldObject {
 	 * Method to set the angle of the character to the passed in value.
 	 * @param a - angle value
          */	
-	public void setAngle(int a) {
-		angle = a;
+	public boolean setDirection(int d) {
+		switch (d) {
+		case 1:
+			if (direction == 3) {
+				return false;
+			}
+			break;
+		case 2:
+			if (direction == 4) {
+				return false;
+			}
+			break;
+		case 3:
+			if (direction == 1) {
+				return false;
+			}
+			break;
+		case 4:
+			if (direction == 2) {
+				return false;
+			}
+			break;
+		}
+		direction = d;
+		return true;
+	}
+	
+	public int getOppositeDirection() {
+		switch (direction) {
+			case 1:
+				return 3;
+			case 2:
+				return 4;
+			case 3:
+				return 1;
+			case 4:
+				return 2;
+		}
+		System.out.println("Error: Direction varaible is not in the range of 1-4.");
+		return 0;
+	}
+	
+	public int getRightDirection() {
+		switch (direction) {
+		case 1:
+			return 2;
+		case 2:
+			return 3;
+		case 3:
+			return 4;
+		case 4:
+			return 1;
+		}
+		System.out.println("Error: The Direction varaible is not in the range of 1-4.");
+		return 0;
+	}
+	
+	public int getLeftDirection() {
+		switch (direction) {
+		case 1:
+			return 4;
+		case 2:
+			return 1;
+		case 3:
+			return 2;
+		case 4:
+			return 3;
+		}
+		System.out.println("Error: The Direction varaible is not in the range of 1-4.");
+		return 0;
 	}
 	
 	/**
@@ -81,4 +153,6 @@ public abstract class FieldObject {
 	 * @return true if it's a character, false otherwise
 	 */
 	public abstract boolean isCharacter();
+	
+	
 }
