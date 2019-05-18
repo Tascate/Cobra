@@ -103,5 +103,6 @@ public class Item extends FieldObject {
 	public int getSpawnCooldown() {
 		return cooldown;
 	}
+	
 
 }
