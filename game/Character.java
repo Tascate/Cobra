@@ -6,14 +6,18 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class Character extends FieldObject {
 	protected boolean alive;
+	int wins;
+	
 	protected int speed; //speed of character
 	protected int nextActionableFrame; 
 	protected double trailMultiplier;
 	
 	protected int rowOfTail;
 	protected int colOfTail;
+	public int tailDirection;
 	protected boolean noTail;
 	protected int trailLength;
+	private Trail[] trailPool;
 	
 	/**
 	* Constructor to initialize the instance variable to the passed in values to make the character and add their features.
@@ -21,18 +25,23 @@ public class Character extends FieldObject {
 	*@param c - color of the character
 	*@param a - angle for where the character is changing directions, whether it's going up, down, left, or right.
 	*/
-	public Character(int theRow, int theColumn, int s, Color c, int direction) {
+	public Character(int theRow, int theColumn, int s, Color c, int d) {
 		row = theRow;
 		col = theColumn;
 		speed = s;
 		light = c;
-		angle = direction;
+		direction = d;
 		nextActionableFrame = 1;
 		trailMultiplier = 1;
+		wins = 0;
 		
 		noTail = true;
 		alive = true;
-		trailLength = 0;
+		trailPool = new Trail[4];
+		trailPool[0] = new Trail(row,col,light,1);
+		trailPool[1] = new Trail(row,col,light,2);
+		trailPool[2] = new Trail(row,col,light,3);
+		trailPool[3] = new Trail(row,col,light,4);
 	}
 	
 	/**
@@ -43,10 +52,11 @@ public class Character extends FieldObject {
 		if (noTail) {
 			rowOfTail = row;
 			colOfTail = col;
+			tailDirection = direction;
 			noTail = false;
 		}
 		trailLength++;
-		return new Trail(row, col, light, angle);
+		return trailPool[direction-1];
 	}
 	
 	public int getTailRow() {
@@ -57,12 +67,20 @@ public class Character extends FieldObject {
 		return colOfTail;
 	}
 	
+	public int getTailDirection() {
+		return tailDirection;
+	}
+	
 	public void setTailRow(int row) {
 		rowOfTail = row;
 	}
 	
 	public void setTailCol(int col) {
 		colOfTail = col;
+	}
+	
+	public void setTailDirection(int d) {
+		tailDirection = d;
 	}
 	
 	public int getTrailLength() {
