@@ -106,7 +106,7 @@ public class TestAI extends Character {
 		}
 		if (Math.random() * 10 < 0.1) {
 			int d = randomDirection();
-			if (searchForDanger(d, spotsToCheck)) {
+			if (searchForDanger(d+1, spotsToCheck)) {
 				System.out.println("Danger is happening");
 				state = 1;
 				lookForNewDirection(spotsToCheck);
@@ -114,7 +114,7 @@ public class TestAI extends Character {
 			}
 			else {
 				System.out.println("Direction is happening");
-				setDirection(d);
+				setDirection(d+1);
 			}
 		}
 		// else continue forward
