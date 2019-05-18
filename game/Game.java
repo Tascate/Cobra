@@ -93,6 +93,9 @@ public class Game {
 				moveChar(char2);
 			}
 		}
+		if (ended()) {
+			endGame();
+		}
 	}
 	
 	/**
@@ -154,6 +157,13 @@ public class Game {
 	 */
 	private void pauseGame() {
 		paused = !paused;
+	}
+	
+	private Boolean ended() {
+		if (char1.isAlive() && char2.isAlive()) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -233,7 +243,6 @@ public class Game {
 		}
 		else {
 			character.die();
-			endGame();
 		}
 	}
 	
@@ -276,6 +285,7 @@ public class Game {
 					if (char1.getDirection() == char2.getOppositeDirection()) {
 						char1.die();
 						char2.die();
+						endGame();
 						return true;
 					}
 				}
