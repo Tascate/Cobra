@@ -70,9 +70,6 @@ public class TestAI extends Character {
 		System.out.print(searchForDanger(direction, spotsToCheck));
 		if (searchForDanger(direction, spotsToCheck)) {
 			inDanger = true;
-			if (state != 3) {
-				state = 0;
-			}
 		}
 		else {
 			inDanger = false;
@@ -85,7 +82,12 @@ public class TestAI extends Character {
 			//reach designated spot
 			case 1:
 				System.out.println("Safe Row: " + safeRow + " Safe Col: " + safeCol);
+				if (inDanger) {
+					deduceLeftOrRight();
+				}
+				else {
 				reachCoords(safeRow, safeCol);
+				}
 				break;
 			//reach item location
 			case 2:
@@ -101,8 +103,9 @@ public class TestAI extends Character {
 	
 	private void steer() {
 		//If still in danger, look for best direction to be in
+		deduceLeftOrRight();
 		if (searchForDanger(direction, spotsToCheck)) { 
-			deduceLeftOrRight();
+			
 		}
 		else {
 			if (itemOnGrid) {
@@ -234,13 +237,13 @@ public class TestAI extends Character {
 		int distance = this.row-row;
 		if (distance > 0) {
 			if(!searchForDanger(4, spotsToCheck) && !setDirection(4)) {
-				matchCol(row,col);
+				deduceLeftOrRight();
 				prioritizeRow = false;
 			}
 		}
 		else {
 			if (!searchForDanger(2, spotsToCheck) && !setDirection(2)) {
-				matchCol(row,col);
+				deduceLeftOrRight();
 				prioritizeRow = false;
 			}
 		}
@@ -250,13 +253,13 @@ public class TestAI extends Character {
 		int distance = this.col-col;
 		if (distance > 0) {
 			if(!searchForDanger(3, spotsToCheck) && !setDirection(3)) {
-				matchRow(row,col);
+				deduceLeftOrRight();
 				prioritizeRow = true;
 			}
 		}
 		else {
 			if(!searchForDanger(1, spotsToCheck) && !setDirection(1)) {
-				matchRow(row,col);
+				deduceLeftOrRight();
 				prioritizeRow = true;
 			}
 		}
