@@ -10,6 +10,11 @@ import com.badlogic.gdx.graphics.Color;
 // Get to that Safe Spot
 // --- Match X first and Y First
 // Always check if destination compromised for new safe spot
+
+/**
+ * AI class to make and test the AI(opponent) to make it play against the player. 
+ * AI has to be uncontrollable.
+ */
 public class TestAI extends Character {
 	private int spotsToCheck;
 	private int state;
@@ -32,9 +37,12 @@ public class TestAI extends Character {
 	
 	/**
 	 * AI constructor to create the AI, which is the opponent of the other player, and sets their wins to 0.
-	 * @param s - speed of AI
-	 * @param c - color of AI
-	 * @param a - angle of AI
+	 * @param grid - grid of game
+	 * @param row - rol of AI
+	 * @param col - col of AI
+	 * @param speed - speed of AI
+	 * @param color - color of AI
+	 * @param d - direction of AI
 	 */
 	public TestAI(FieldObject[][]  grid, int row, int col, int speed, Color color, int d) {
 		super(row, col, speed, color, d);
@@ -50,7 +58,9 @@ public class TestAI extends Character {
 		prioritizeRow = true;
 	}
 	/**
-	*Method that will have the AI go for the item if an item appears.
+	* Method that will have the AI go for the item if an item appears.
+	* @param itemRow - row value for which the item is located
+	* @param itemCol - column value for which the item is located
 	*/
 	public void prioritizeItem(int itemRow, int itemCol) {
 		itemOnGrid = true;
@@ -59,8 +69,8 @@ public class TestAI extends Character {
 		this.itemCol = itemCol;
 	}
 	/**
-	*If the item is taken by either the player or AI, then the AI
-	*will resume its previous runAI behavior.
+	* If the item is taken by either the player or AI, then the AI
+	* will resume its previous runAI behavior.
 	*/
 	public void resetState() {
 		itemOnGrid = false;
@@ -69,8 +79,8 @@ public class TestAI extends Character {
 		runAI();
 	}
 	/**
-	*Runs the AI which is the computer player. Makes the AI wander, seek out the item,
-	*travel to the safe coordinate, and makes the AI avoid danger.
+	* Runs the AI which is the computer player. Makes the AI wander, seek out the item,
+	* travel to the safe coordinate, and makes the AI avoid danger.
 	*/
 	public void runAI() {
 		System.out.print("State: " + state + ", " + row + ", " + col);
@@ -114,8 +124,8 @@ public class TestAI extends Character {
 		System.out.println(" New Direction:" + direction);
 	}
 	/**
-	*If the AI is in danger, the AI will move in a direction that will
-	*get it out of danger.
+	* If the AI is in danger, the AI will move in a direction that will
+	* get it out of danger.
 	*/
 	private void steer() {
 		//If still in danger, look for best direction to be in
@@ -133,8 +143,8 @@ public class TestAI extends Character {
 		}
 		}
 	/*
-	*Method that will have the AI randomly wander as  long as it is
-	*not in danger.
+	* Method that will have the AI randomly wander as  long as it is
+	* not in danger.
 	*/
 	private void wander() {
 		if (inDanger) {
@@ -151,8 +161,10 @@ public class TestAI extends Character {
 		// else continue forward
 	}
 	/**
-	*Method that will recognize whether or not the AI is in danger of being killed.
-	*@return true if the AI is in danger
+	* Method that will recognize whether or not the AI is in danger of being killed.
+	* @param direction - direction that AI is going in.
+	* @param spots - checks for number of spots
+	* @return true if the AI is in danger
 	*/
 	public boolean searchForDanger(int direction, int spots) {
 		try {
@@ -183,8 +195,9 @@ public class TestAI extends Character {
 		return false;
 	}
 	/**
-	*Returns the distance the AI has before it collides with either the wall or the player
-	*@return distance until impact
+	* Returns the distance the AI has before it collides with either the wall or the player
+	* @param direction - direction the AI is going in
+	* @return distance until impact
 	*/
 	public int distanceUntilImpact(int direction) {
 		int i = 0;
@@ -219,7 +232,7 @@ public class TestAI extends Character {
 		return Math.abs(i);
 	}
 	/**
-	*Deduces what direction the player is most likely to make in order to make the saftest turn.
+	* Deduces what direction the player is most likely to make in order to make the saftest turn.
 	*/
 	private void deduceLeftOrRight() {
 		int left = getLeftDirection();
@@ -233,7 +246,9 @@ public class TestAI extends Character {
 	}
 	
 	/**
-	*Checks to see if the AI has reached the desired coordinate on the grid
+	* Checks to see if the AI has reached the desired coordinate on the grid
+	* @param row - row value to reach
+	* @param col - column value to reach
 	*/
 	private void reachCoords(int row, int col) {
 			if (prioritizeRow) {
@@ -264,7 +279,9 @@ public class TestAI extends Character {
 			}
 	}
 	/*
-	*Checks to see if the row the snake is in is the desired row
+	* Checks to see if the row the snake is in is the desired row
+	* @param row - desired row value
+	* @param col - column value
 	*/
 	private void matchRow(int row, int col) {
 		int distance = this.row-row;
@@ -282,7 +299,9 @@ public class TestAI extends Character {
 		}
 	}
 	/**
-	*Checks to see if the row the snake is in is the desired colomn
+	* Checks to see if the row the snake is in is the desired colomn
+	* @param row - row value
+	* @param col - desired column value
 	*/
 	private void matchCol(int row, int col) {
 		int distance = this.col-col;
@@ -300,14 +319,14 @@ public class TestAI extends Character {
 		}
 	}
 	/**
-	*Returns a random direction that the snake will move in.
-	*@return random direction
+	* Returns a random direction that the snake will move in.
+	* @return random direction
 	*/
 	private int randomDirection() {
 		return rand.nextInt(4);
 	}
 	/**
-	*Randomly generates a safe coordinate for the AI to seek out and travel to
+	* Randomly generates a safe coordinate for the AI to seek out and travel to
 	*/
 	private void generateSafePlace() {
 		int row = rand.nextInt(map.length-140);
