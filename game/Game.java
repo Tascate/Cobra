@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -15,12 +14,12 @@ public class Game {
 	private Character char1; //player 1
 	private Character char2; //player 2
 	private TestAI ai;
-	private Boolean realOpponent; //whether Player 2 is a Second Player or AI
-	private Boolean paused; //check if game is paused or not
-	private Boolean ended; //check if game has ended or not
+	private boolean realOpponent; //whether Player 2 is a Second Player or AI
+	private boolean paused; //check if game is paused or not
+	private boolean ended; //check if game has ended or not
 	private int maxTrailLength;
 	
-		private Item currentItem;
+	private Item currentItem;
 	private Item[] itemPool;
 	private boolean itemQueued;
 	private boolean itemSpawned;
@@ -29,7 +28,8 @@ public class Game {
 	private int itemSpawnTimer; //Range of 20-30 seconds randomly
 	private Random rand;
 	
-	int currentFrame;
+	private int currentFrame;
+	private int pausedFrame;
 	private int seconds;
 	private int minutes;
 	
@@ -70,7 +70,6 @@ public class Game {
 		for (int i = 0; i < Item.getMaxID(); i++) {
 			itemPool[i] = new Item(i);
 		}
-		
 		grid[rows - (rows * 1/8)][cols * 1/2] = char2;
 	}
 	
@@ -100,6 +99,7 @@ public class Game {
 					itemSpawned = false;
 				}
 			}
+
 			if (currentFrame % char1.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
 				moveChar(char1);
 			}
@@ -192,6 +192,7 @@ public class Game {
 	
 	private void checkForOtherInput() {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+			pausedFrame = 0;
 			pauseGame();
 		}
 	}
@@ -202,6 +203,7 @@ public class Game {
 	private void pauseGame() {
 		paused = !paused;
 	}
+	
 	/**
 	Checks to see of the game has ended
 	*@return true if the game has ended
@@ -344,6 +346,7 @@ public class Game {
 		//area is in bounds and unoccupied
 		return false;
 	}
+	
 	/**
 	*Checks to see whether the coordinate on the grid is occupied
 	*@return true if point on grid is occupied
@@ -353,19 +356,17 @@ public class Game {
 	}
 	
 	/**
-	*Checks to see if the tail is getting too long.
+	*Removes any excess tail on the sprite if the tail gets too long
 	*/
 	private void checkForExcessTrail() {
-		if (char1.getTrailLength() > (int)maxTrailLength * char1.getTrailMultiplier()) {
+		if (char1.getTrailLength() > ((int)maxTrailLength * char1.getTrailMultiplier())) {
 			removeExcessTrail(char1);
 		}
-		if (char2.getTrailLength() > (int)maxTrailLength * char2.getTrailMultiplier()) {
+		if (char2.getTrailLength() > ((int)maxTrailLength * char2.getTrailMultiplier())) {
 			removeExcessTrail(char2);
 		}
 	}
-	/**
-	*Removes any excess tail on the sprite if the tail gets too long
-	*/
+	
 	private void removeExcessTrail(Character character) {
 		//Get Tail Details
 		int row = character.getTailRow();
@@ -399,7 +400,9 @@ public class Game {
 					grid[row-i][col] = null;
 				}
 				break;
+		}
 		character.setTailDirection(grid[character.getTailRow()][character.getTailCol()].getDirection());
+		
 		//Remove the old Tail
 		character.decrementTrailLength();
 	}
@@ -408,7 +411,7 @@ public class Game {
 	*Queue an item
 	*@return true if tem is queued
 	*/
-	public void queueItem() {
+	private void queueItem() {
 		if (!itemQueued) {
 			int row = rand.nextInt(grid.length/2 + grid.length/4);
 			int col = rand.nextInt(grid[0].length/2 +grid[0].length/4);
@@ -426,7 +429,7 @@ public class Game {
 	*Checks to see if an item has been spawned.
 	*@return true if item has been spawned
 	*/
-	public boolean spawnItem() {
+	private boolean spawnItem() {
 		if (grid[currentItem.getRow()][currentItem.getCol()] == null && itemSpawned == false && itemQueued == true) {
 			grid[currentItem.getRow()][currentItem.getCol()] = currentItem;
 			if (!realOpponent) {
@@ -439,7 +442,7 @@ public class Game {
 		}
 		return false;
 	}
-		
+	
 	private void detectItemCollision() {
 		int row = currentItem.getRow() - 5;
 		int col = currentItem.getCol() - 5;
@@ -463,10 +466,6 @@ public class Game {
 	 */
 	public FieldObject[][] getGrid() {
 		return grid;
-	}
-		
-	public Item[] getItemPool() {
-		return itemPool;
 	}
 	
 	/**
@@ -496,6 +495,7 @@ public class Game {
 	public Boolean isGameEnded() {
 		return ended;
 	}
+	
 	/**
 	*Returns whether or not the game is paused
 	*@return the state of whether or not the game is paused
@@ -503,12 +503,18 @@ public class Game {
 	public Boolean isPaused() {
 		return paused;
 	}
+	
 	/**
 	*Checks to see of the player sprite is blinking if the game is pausd
 	*@return true of the modulus of the seconds by 2 is equal to 0
 	*/
 	public Boolean blinkPlayerWhenPaused() {
-		return seconds % 2 == 0;
+		pausedFrame++;
+		return pausedFrame / 60 < 10;
+	}
+	
+	public Item[] getItemPool() {
+		return itemPool;
 	}
 	
 	/**
