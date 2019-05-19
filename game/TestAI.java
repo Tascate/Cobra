@@ -44,6 +44,7 @@ public class TestAI extends Character {
 		spotsToCheck = 20;
 		safeRow = 0;
 		safeCol = 0;
+		generateSafePlace();
 		state = 3;
 	}
 	
@@ -71,23 +72,12 @@ public class TestAI extends Character {
 				break;
 			//reach designated spot
 			case 1:
-				if (inDanger) {
-					deduceLeftOrRight();
-				}
-				else {
 				System.out.println("Safe Row: " + safeRow + " Safe Col: " + safeCol);
 				reachCoords(safeRow, safeCol);
-				}
-				
 				break;
 			//reach item location
 			case 2:
-				if (inDanger) {
-					deduceLeftOrRight();
-				}
-				else {
-					reachCoords(itemRow, itemCol);
-				}
+				reachCoords(itemRow, itemCol);
 				break;
 			//search for a direction
 			case 3:
@@ -104,7 +94,7 @@ public class TestAI extends Character {
 				state = 2;
 			}
 			else {
-				generateSafePlace();
+				state = 1;
 			}
 		}
 	
@@ -113,7 +103,7 @@ public class TestAI extends Character {
 			deduceLeftOrRight();
 			generateSafePlace();
 		}
-		if (Math.random() * 10 < 0.5) {
+		if (Math.random() * 10 < 0.2) {
 			int d = randomDirection();
 			if (!searchForDanger(d+1, spotsToCheck)) {
 				System.out.println("Direction is happening");
