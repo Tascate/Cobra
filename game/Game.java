@@ -128,19 +128,19 @@ public class Game {
 		if (realOpponent) {
 			gotInput = false;
 			if(Gdx.input.isKeyPressed(Input.Keys.A) && !gotInput){
-				char1.setDirection(4);
+				char2.setDirection(4);
 				gotInput = true;
 			}
 			if(Gdx.input.isKeyPressed(Input.Keys.D) && !gotInput){
-				char1.setDirection(2);
+				char2.setDirection(2);
 				gotInput = true;
 			}
 			if(Gdx.input.isKeyPressed(Input.Keys.W) && !gotInput){
-				char1.setDirection(1);
+				char2.setDirection(1);
 				gotInput = true;
 			}
 			if(Gdx.input.isKeyPressed(Input.Keys.S) && !gotInput){
-				char1.setDirection(3);
+				char2.setDirection(3);
 				gotInput = true;
         	}
 		}
