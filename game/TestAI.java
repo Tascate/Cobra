@@ -45,6 +45,7 @@ public class TestAI extends Character {
 		safeRow = 0;
 		safeCol = 0;
 		state = 3;
+		generateSafePlace();
 	}
 	
 	public void prioritizeItem(int itemRow, int itemCol) {
@@ -59,7 +60,6 @@ public class TestAI extends Character {
 		System.out.println(" " + direction);
 		if (searchForDanger(direction, spotsToCheck)) {
 			inDanger = true;
-			state = 0;
 		}
 		else {
 			inDanger = false;
@@ -71,13 +71,23 @@ public class TestAI extends Character {
 				break;
 			//reach designated spot
 			case 1:
+				if (inDanger) {
+					deduceLeftOrRight();
+				}
+				else {
 				System.out.println("Safe Row: " + safeRow + " Safe Col: " + safeCol);
 				reachCoords(safeRow, safeCol);
+				}
 				
 				break;
 			//reach item location
 			case 2:
-				reachCoords(itemRow, itemCol);
+				if (inDanger) {
+					deduceLeftOrRight();
+				}
+				else {
+					reachCoords(itemRow, itemCol);
+				}
 				break;
 			//search for a direction
 			case 3:
@@ -90,20 +100,18 @@ public class TestAI extends Character {
 	private void steer() {
 		//If still in danger, look for best direction to be in
 		deduceLeftOrRight();
-		generateSafePlace();
 			if (itemOnGrid) {
 				state = 2;
 			}
 			else {
 				state = 1;
-				generateSafePlace();
 			}
 		}
 	
 	private void wander() {
 		if (inDanger) {
-			state = 1;
 			deduceLeftOrRight();
+			state = 1;
 			generateSafePlace();
 		}
 		if (Math.random() * 10 < 0.5) {
@@ -210,9 +218,11 @@ public class TestAI extends Character {
 		int right = getRightDirection();
 		if (distanceUntilImpact(left) > distanceUntilImpact(right)) {
 			setDirection(left);
+			state = 3;
 		}
 		else {
 			setDirection(right);
+			state = 3;
 		}
 	}
 	
@@ -265,14 +275,13 @@ public class TestAI extends Character {
 	}
 	
 	private void generateSafePlace() {
-		int row = rand.nextInt(map.length-40);
-		int col = rand.nextInt(map[0].length-40);
-		safeRow = row+20;
-		safeCol = col+20;
+		int row = rand.nextInt(map.length-80);
+		int col = rand.nextInt(map[0].length-80);
+		safeRow = row+40;
+		safeCol = col+40;
 		if (map[safeRow][safeCol] != null) {
 			generateSafePlace();
 		}
-		state = 1;
 	}
 	
 }
