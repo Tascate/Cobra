@@ -147,7 +147,7 @@ public class TestAI extends Character {
 	}
 	/**
 	*Method that will recognize whether or not the AI is in danger of being killed.
-	*@return danger
+	*@return true if the AI is in danger
 	*/
 	public boolean searchForDanger(int direction, int spots) {
 		try {
