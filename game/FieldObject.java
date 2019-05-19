@@ -69,7 +69,10 @@ public abstract class FieldObject {
 		direction = d;
 		return true;
 	}
-	
+	/**
+	*Returns the opposite direction
+	*@return opposite direction
+	*/
 	public int getOppositeDirection() {
 		switch (direction) {
 			case 1:
@@ -84,7 +87,10 @@ public abstract class FieldObject {
 		System.out.println("Error: Direction varaible is not in the range of 1-4.");
 		return 0;
 	}
-	
+	/**
+	*Returns the right direction
+	*@return the right direction
+	*/
 	public int getRightDirection() {
 		switch (direction) {
 		case 1:
@@ -99,7 +105,10 @@ public abstract class FieldObject {
 		System.out.println("Error: The Direction varaible is not in the range of 1-4.");
 		return 0;
 	}
-	
+	/**
+	*Returns the left direction
+	*@return the left direction
+	*/
 	public int getLeftDirection() {
 		switch (direction) {
 		case 1:
