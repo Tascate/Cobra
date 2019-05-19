@@ -22,6 +22,7 @@ public class TestAI extends Character {
 	private boolean itemOnGrid;
 	private int itemRow;
 	private int itemCol;
+	private boolean prioritizeRow;
 	
 	private boolean inDanger;
 	private int safeRow;
@@ -46,6 +47,7 @@ public class TestAI extends Character {
 		safeCol = 0;
 		generateSafePlace();
 		state = 3;
+		prioritizeRow = true;
 	}
 	
 	public void prioritizeItem(int itemRow, int itemCol) {
@@ -55,9 +57,17 @@ public class TestAI extends Character {
 		this.itemCol = itemCol;
 	}
 	
+	public void resetState() {
+		itemOnGrid = false;
+		prioritizeRow = true;
+		state = 3;
+		runAI();
+	}
+	
 	public void runAI() {
 		System.out.print("State: " + state + ", " + row + ", " + col);
 		System.out.println(", Direction: " + direction);
+		System.out.print(searchForDanger(direction, spotsToCheck));
 		if (searchForDanger(direction, spotsToCheck)) {
 			inDanger = true;
 			if (state != 3) {
@@ -91,13 +101,17 @@ public class TestAI extends Character {
 	
 	private void steer() {
 		//If still in danger, look for best direction to be in
-		deduceLeftOrRight();
+		if (searchForDanger(direction, spotsToCheck)) { 
+			deduceLeftOrRight();
+		}
+		else {
 			if (itemOnGrid) {
 				state = 2;
 			}
 			else {
 				state = 1;
 			}
+		}
 		}
 	
 	private void wander() {
@@ -151,11 +165,11 @@ public class TestAI extends Character {
 				switch (direction) {
 				case 1:
 					if (map[row][col+i] != null)
-						return i;
+						return Math.abs(i);
 					else i++;
 				case 3:
 					if (map[row][col-i] != null)
-						return i;
+						return Math.abs(i);
 					else i--;
 				}
 			}
@@ -165,45 +179,17 @@ public class TestAI extends Character {
 				switch (direction) {
 				case 2:
 					if (map[row+i][col] != null)
-						return i;
+						return Math.abs(i);
 					else i++;
 				case 4:
 					if (map[row-i][col] != null)
-						return i;
+						return Math.abs(i);
 					else i--;
 				}
 			}
 		}
 		return Math.abs(i);
 	}
-	
-	private void lookForNewDirection(int spots) {
-		//Look Right or Left
-			int left = getLeftDirection();
-			int right = getRightDirection();
-			boolean canGoLeft = searchForDanger(left, spots);
-			boolean canGoRight = searchForDanger(right, spots);
-			if (canGoLeft && canGoRight) {
-				if(System.currentTimeMillis() % 2 == 0) {
-					setDirection(left);
-				}
-				else {
-					setDirection(right);
-				}
-			}
-			else if (canGoLeft && !canGoRight) {
-				setDirection(left);
-			}
-			else if (!canGoLeft && canGoRight) {
-				setDirection(right);
-			}
-			else {
-				state = 1;
-				generateSafePlace();
-				reachCoords(safeRow, safeCol);
-			}
-	}
-	
 	private void deduceLeftOrRight() {
 		int left = getLeftDirection();
 		int right = getRightDirection();
@@ -216,31 +202,46 @@ public class TestAI extends Character {
 	}
 	
 	private void reachCoords(int row, int col) {
-		if (this.row != row) {
-			matchRow(row, col);
-		}
-		else if (this.col != col) {
-			matchCol(row, col);
-		}
-		else {
-			System.out.print("Reached Location.");
-			itemOnGrid = false;
-			//Reached Location, now Wander
-			state = 3;
-			runAI();
-		}
+			if (prioritizeRow) {
+				if (this.row != row) {
+					matchRow(row, col);
+				}
+				else if (this.col != col) {
+					matchCol(row, col);
+				}
+				else {
+					System.out.print("Reached Location.");
+					//Reached Location, now go back to State 3 (Wander Around)
+					resetState();
+				}
+			}
+			else {
+				if (this.col != col) {
+					matchCol(row, col);
+				}
+				else if (this.row != row) {
+					matchRow(row, col);
+				}
+				else {
+					System.out.print("Reached Location.");
+					//Reached Location, now go back to State 3 (Wander Around)
+					resetState();
+				}
+			}
 	}
 	
 	private void matchRow(int row, int col) {
 		int distance = this.row-row;
 		if (distance > 0) {
 			if(!searchForDanger(4, spotsToCheck) && !setDirection(4)) {
-				matchCol(row, col);
+				matchCol(row,col);
+				prioritizeRow = false;
 			}
 		}
 		else {
-			if (!searchForDanger(4, spotsToCheck) && !setDirection(2)) {
-				matchCol(row, col);
+			if (!searchForDanger(2, spotsToCheck) && !setDirection(2)) {
+				matchCol(row,col);
+				prioritizeRow = false;
 			}
 		}
 	}
@@ -248,13 +249,15 @@ public class TestAI extends Character {
 	private void matchCol(int row, int col) {
 		int distance = this.col-col;
 		if (distance > 0) {
-			if(!searchForDanger(4, spotsToCheck) && !setDirection(3)) {
-				matchRow(row, col);
+			if(!searchForDanger(3, spotsToCheck) && !setDirection(3)) {
+				matchRow(row,col);
+				prioritizeRow = true;
 			}
 		}
 		else {
-			if(!searchForDanger(4, spotsToCheck) && !setDirection(1)) {
-				matchRow(row, col);
+			if(!searchForDanger(1, spotsToCheck) && !setDirection(1)) {
+				matchRow(row,col);
+				prioritizeRow = true;
 			}
 		}
 	}
