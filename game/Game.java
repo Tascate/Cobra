@@ -207,22 +207,6 @@ public class Game {
 		int col = character.getCol();
 		// System.out.print(" Collision: " + collision);
 		if (!collided(character)) {		
-			int speed = character.getSpeed();
-			switch (character.getDirection()) {
-				case 1:
-					character.setCol(col+speed);
-					break;
-				case 2:
-					character.setRow(row+speed);
-					break;
-				case 3:
-					character.setCol(col-speed);
-					break;
-				case 4:
-					character.setRow(row-speed);
-					break;
-			}
-			
 			for(int i = 0; i < char1.getSpeed(); i++) {
 				switch (character.getDirection()) {
 				case 1:
@@ -239,6 +223,23 @@ public class Game {
 					break;
 				}
 			}
+			
+			int speed = character.getSpeed();
+			switch (character.getDirection()) {
+				case 1:
+					character.setCol(col+speed);
+					break;
+				case 2:
+					character.setRow(row+speed);
+					break;
+				case 3:
+					character.setCol(col-speed);
+					break;
+				case 4:
+					character.setRow(row-speed);
+					break;
+			}
+			grid[character.getRow()][character.getCol()] = character;
 			checkForExcessTrail();
 		}
 		else {
