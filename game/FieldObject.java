@@ -17,7 +17,7 @@ public abstract class FieldObject {
 	
 	/**
 	 * Method to return the color of the character in the game.
-	 *@return color of character in game.
+	 * @return color of character in game.
 	 */
 	public Color getColor() {
 		return light;
@@ -40,8 +40,8 @@ public abstract class FieldObject {
 	}
 	
 	/**
-	 * Method to set the angle of the character to the passed in value.
-	 * @param a - angle value
+	 * Method to set the direction of the character to the passed in value.
+	 * @param d - direction value
          */	
 	public boolean setDirection(int d) {
 		switch (d) {
@@ -70,8 +70,8 @@ public abstract class FieldObject {
 		return true;
 	}
 	/**
-	*Returns the opposite direction
-	*@return opposite direction
+	* Returns the opposite direction
+	* @return opposite direction
 	*/
 	public int getOppositeDirection() {
 		switch (direction) {
@@ -88,8 +88,8 @@ public abstract class FieldObject {
 		return 0;
 	}
 	/**
-	*Returns the right direction
-	*@return the right direction
+	* Returns the right direction
+	* @return the right direction
 	*/
 	public int getRightDirection() {
 		switch (direction) {
@@ -106,8 +106,8 @@ public abstract class FieldObject {
 		return 0;
 	}
 	/**
-	*Returns the left direction
-	*@return the left direction
+	* Returns the left direction
+	* @return the left direction
 	*/
 	public int getLeftDirection() {
 		switch (direction) {
