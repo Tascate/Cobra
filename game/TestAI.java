@@ -99,7 +99,12 @@ public class TestAI extends Character {
 				break;
 			//reach item location
 			case 2:
+				if (inDanger) {
+					deduceLeftOrRight();
+				}
+				else {
 				reachCoords(itemRow, itemCol);
+				}
 				break;
 			//search for a direction
 			case 3:
