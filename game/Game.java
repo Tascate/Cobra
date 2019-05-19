@@ -131,10 +131,7 @@ public class Game {
 	}
 	
 	private void timeSpecificScenarios() {
-		if (seconds % 20 == 0 && currentFrame == 1 && seconds != 0) {
-			maxTrailLength *= 2;
-		}
-		if (seconds % (itemSpawnTimer-7) == 0 && currentFrame == 1 && seconds != 0) {
+		if (seconds % (itemSpawnTimer-7) == 0 && currentFrame == 1 && seconds != 0 && !itemSpawned && !itemQueued) {
 			queueItem();
 		}
 		if (seconds % itemSpawnTimer == 0 && currentFrame == 1 && seconds != 0) {
