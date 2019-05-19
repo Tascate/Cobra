@@ -78,7 +78,7 @@ public class Item extends FieldObject {
 		inPlay = false;
 	}
 
-	public boolean expired(int duration) {
+	public boolean expired() {
 		return duration >= maxDuration;
 	}
 	
