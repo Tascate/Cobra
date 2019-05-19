@@ -158,14 +158,14 @@ public class Item extends FieldObject {
 	*Returns whether or not the item is queued
 	*@return whether or not the item is queued
 	*/
-	public Boolean isQueued() {
+	public boolean isQueued() {
 		return queued;
 	}
 	/**
 	*Returns whether or not the item is in play
 	*@return whether or not the item is in play
 	*/
-	public Boolean isInPlay() {
+	public boolean isInPlay() {
 		return inPlay;
 	}
 	
