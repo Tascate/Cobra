@@ -464,6 +464,10 @@ public class Game {
 	public FieldObject[][] getGrid() {
 		return grid;
 	}
+		
+	public Item[] getItemPool() {
+		return itemPool;
+	}
 	
 	/**
 	 * Method to find and return the winner.
