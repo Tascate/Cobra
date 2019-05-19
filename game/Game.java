@@ -91,9 +91,9 @@ public class Game {
 				itemFrame++;
 				if (itemFrame > 60) {
 					itemFrame = 0;
-					currentItem.addSecond();;
+					currentItem.addSecond();
 				}
-				if (currentItem.expired(1)) {
+				if (currentItem.expired()) {
 					currentItem.deactivate(char1, char2);
 					itemInEffect = false;
 					itemQueued = false;
