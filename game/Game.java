@@ -158,7 +158,10 @@ public class Game {
 	private void pauseGame() {
 		paused = !paused;
 	}
-	
+	/**
+	Checks to see of the game has ended
+	*@return true if the game has ended
+	*/
 	private Boolean ended() {
 		if (char1.isAlive() && char2.isAlive()) {
 			return false;
@@ -297,11 +300,17 @@ public class Game {
 		//area is in bounds and unoccupied
 		return false;
 	}
-	
+	/**
+	*Checks to see whether the coordinate on the grid is occupied
+	*@return true if point on grid is occupied
+	*/
 	private boolean isOccupied (int row, int col) {
 		return grid[row][col] != null;
 	}
 	
+	/**
+	*Checks to see if the tail is getting too long.
+	*/
 	private void checkForExcessTrail() {
 		if (char1.getTrailLength() > (int)maxTrailLength * char1.getTrailMultiplier()) {
 			removeExcessTrail(char1);
@@ -310,7 +319,9 @@ public class Game {
 			removeExcessTrail(char2);
 		}
 	}
-	
+	/**
+	*Removes any excess tail on the sprite if the tail gets too long
+	*/
 	private void removeExcessTrail(Character character) {
 		//Get Tail Details
 		int row = character.getTailRow();
@@ -338,6 +349,10 @@ public class Game {
 		character.decrementTrailLength();
 	}
 	
+	/**
+	*Checks to see if an item is in queue
+	*@return true if tem is queued
+	*/
 	public boolean queueItem() {
 		if (!itemQueued) {
 			int row = rand.nextInt(grid.length);
@@ -351,7 +366,10 @@ public class Game {
 		return false;
 	}
 		
-	
+	/**
+	*Checks to see if an item has been spawned.
+	*@return true if item has been spawned
+	*/
 	public boolean spawnItem() {
 		if (grid[currentItem.getRow()][currentItem.getCol()] == null) {
 			grid[currentItem.getRow()][currentItem.getCol()] = currentItem;
@@ -391,15 +409,24 @@ public class Game {
 		}
 		return -1; // should not be reached if this method is called whenever the game ends
 	}
-	
+	/*
+	*Returns whether or not the game has ended.
+	*@return the state of whether or not the game has ended
+	*/
 	public Boolean isGameEnded() {
 		return ended;
 	}
-	
+	/**
+	*Returns whether or not the game is paused
+	*@return the state of whether or not the game is paused
+	*/
 	public Boolean isPaused() {
 		return paused;
 	}
-	
+	/**
+	*Checks to see of the player sprite is blinking if the game is pausd
+	*@return true of the modulus of the seconds by 2 is equal to 0
+	*/
 	public Boolean blinkPlayerWhenPaused() {
 		return seconds % 2 == 0;
 	}
