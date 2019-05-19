@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 
 /**
- * Game class to run the game.
+ * Game class to run and simulate the game.
  */
 public class Game {
 	private FieldObject[][] grid; //grid of game
@@ -115,6 +115,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method to increase the timer for game.
+	 */
 	private void increaseTimer() {
 		currentFrame++;
 		if (currentFrame > 60) {
@@ -130,8 +133,14 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Method that identifies what will happen to the trail at different times as the time goes along.
+	 */
 	private void timeSpecificScenarios() {
-		if (seconds % (itemSpawnTimer-7) == 0 && currentFrame == 1 && seconds != 0 && !itemSpawned && !itemQueued) {
+		if (seconds % 20 == 0 && currentFrame == 1 && seconds != 0) {
+			maxTrailLength *= 2;
+		}
+		if (seconds % (itemSpawnTimer-7) == 0 && currentFrame == 1 && seconds != 0) {
 			queueItem();
 		}
 		if (seconds % itemSpawnTimer == 0 && currentFrame == 1 && seconds != 0) {
@@ -187,6 +196,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Check for input. If the enter key is pressed, the game will pause.
+	 */
 	private void checkForOtherInput() {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 			pausedFrame = 0;
@@ -245,6 +257,7 @@ public class Game {
 	/**
 	 * Method to move the character during the game. If the space they are moving into is unoccupied, they keep moving. Otherwise,
 	 * if they player is going to a place that is occupied and is collided with anything, the game ends and they die.
+	 * @param character - character in game
 	 */
 	private void moveChar(Character character) {
 		// System.out.print("Start:");
@@ -346,6 +359,8 @@ public class Game {
 	
 	/**
 	*Checks to see whether the coordinate on the grid is occupied
+	* @param row - row of grid
+	* @param col - col of grid
 	*@return true if point on grid is occupied
 	*/
 	private boolean isOccupied (int row, int col) {
@@ -364,6 +379,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Removes any excess trail of the character if the tail gets too long.
+	 * @param character - character to remove the excess trail
+	 */
 	private void removeExcessTrail(Character character) {
 		//Get Tail Details
 		int row = character.getTailRow();
@@ -405,8 +424,7 @@ public class Game {
 	}
 	
 	/**
-	*Queue an item
-	*@return true if tem is queued
+	* Queue an item
 	*/
 	private void queueItem() {
 		if (!itemQueued) {
@@ -440,6 +458,9 @@ public class Game {
 		return false;
 	}
 	
+	/**
+	 * Detects the item collision with the player.
+	 */
 	private void detectItemCollision() {
 		int row = currentItem.getRow() - 5;
 		int col = currentItem.getCol() - 5;
@@ -510,6 +531,10 @@ public class Game {
 		return pausedFrame / 60 < 10;
 	}
 	
+	/**
+	 * Returns the array of the possible items in game
+	 * @return array of the possible items in game
+	 */
 	public Item[] getItemPool() {
 		return itemPool;
 	}
