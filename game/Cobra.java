@@ -63,7 +63,7 @@ public class Cobra extends ApplicationAdapter {
 		
 		brightness = 1;
 		secondPlayer = false;
-		round = new Game(300,225, secondPlayer);
+		round = new Game(310,225, secondPlayer);
 		scale = 2.0f;
 		startX = 10;
 		startY = 10;
@@ -103,29 +103,47 @@ public class Cobra extends ApplicationAdapter {
 		shapeRender.end();
 		
 		//Draw Light Trails for character in game
-		if (!round.isPaused() || round.blinkPlayerWhenPaused()) {
 		shapeRender.begin(ShapeType.Filled);
 		for (int i = 0; i < round.getGrid().length; i++) {
 			for(int j = 0; j <round.getGrid()[i].length; j++) {
-				if(round.getGrid()[i][j] != null && round.getGrid()[i][j].isCharacter() == false) {
+				if(round.getGrid()[i][j] != null && !round.getGrid()[i][j].isCharacter() ) {
 					Color trail = round.getGrid()[i][j].getColor();
 					shapeRender.setColor(trail);
 					shapeRender.rect(startX+(i*scale), startY+(j*scale), scale, scale);
 				}
 			}
 		}
-		shapeRender.end();
 		
 		
 		//Draw Player One
-		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLUE);
 		shapeRender.circle(startX+(round.getChar1Row()*scale)+1, (startY+round.getChar1Col()*scale)+1, scale);
 		//Draw Player Two
 		shapeRender.setColor(Color.RED);
 		shapeRender.circle(startX+(round.getChar2Row()*scale)+1, (startY+round.getChar2Col()*scale)+1, scale);
 		shapeRender.end();
+		
+		
+		//Draw Items
+		for (int i = 0; i < round.getItemPool().length; i++) {
+			if (round.getItemPool()[i].isQueued()) {
+				shapeRender.begin(ShapeType.Line);
+				shapeRender.setColor(Color.GREEN);
+				int x = round.getItemPool()[i].getRow();
+				int y = round.getItemPool()[i].getCol();
+				shapeRender.triangle(startX+(x-5)*scale, startY+(y-5)*scale, startX+(x)*scale, startY+(y+5)*scale, startX+(x+5)*scale, startY+(y-5)*scale);
+				shapeRender.end();
+			}
+			else if (round.getItemPool()[i].isInPlay()) {
+				shapeRender.begin(ShapeType.Filled);
+				shapeRender.setColor(Color.GREEN);
+				int x = round.getItemPool()[i].getRow();
+				int y = round.getItemPool()[i].getCol();
+				shapeRender.triangle(startX+(x-5)*scale, startY+(y-5)*scale, startX+(x)*scale, startY+(y+5)*scale, startX+(x+5)*scale, startY+(y-5)*scale);
+				shapeRender.end();
+			}
 		}
+		shapeRender.end();
 		
 		if (round.isPaused()) {
 			spriteBatch.begin();
