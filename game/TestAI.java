@@ -143,7 +143,7 @@ public class TestAI extends Character {
 		}
 		}
 	/*
-	* Method that will have the AI randomly wander as  long as it is
+	* Method that will have the AI randomly wander as long as it is
 	* not in danger.
 	*/
 	private void wander() {
