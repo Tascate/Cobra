@@ -69,6 +69,9 @@ public class Cobra extends ApplicationAdapter {
 		startY = 10;
 	}
 	
+	/**
+	 * Resets the game to a new game.
+	 */
 	public void reset() {
 		round = new Game(300,225, secondPlayer);
 	}
@@ -92,6 +95,9 @@ public class Cobra extends ApplicationAdapter {
 		drawGame();
 	}
 	
+	/**
+	 * Draws the necessary things for the game to play on.
+	 */
 	private void drawGame() {
 		int length = round.getGrid().length;
 		int width = round.getGrid()[0].length;
