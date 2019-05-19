@@ -79,7 +79,7 @@ public class Item extends FieldObject {
 	}
 
 	public boolean expired(int duration) {
-		return maxDuration > duration;
+		return duration >= maxDuration;
 	}
 	
 	public void addSecond() {
