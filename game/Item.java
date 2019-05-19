@@ -95,6 +95,7 @@ public class Item extends FieldObject {
 		inPlay = true;
 	}
 	public void deactivate(Character char1, Character char2) {
+		returnToNormal(char1, char2);
 		inPlay = false;
 	}
 
