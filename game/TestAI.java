@@ -45,7 +45,6 @@ public class TestAI extends Character {
 		safeRow = 0;
 		safeCol = 0;
 		state = 3;
-		generateSafePlace();
 	}
 	
 	public void prioritizeItem(int itemRow, int itemCol) {
@@ -60,6 +59,7 @@ public class TestAI extends Character {
 		System.out.println(" " + direction);
 		if (searchForDanger(direction, spotsToCheck)) {
 			inDanger = true;
+			state = 0;
 		}
 		else {
 			inDanger = false;
@@ -104,14 +104,13 @@ public class TestAI extends Character {
 				state = 2;
 			}
 			else {
-				state = 1;
+				generateSafePlace();
 			}
 		}
 	
 	private void wander() {
 		if (inDanger) {
 			deduceLeftOrRight();
-			state = 1;
 			generateSafePlace();
 		}
 		if (Math.random() * 10 < 0.5) {
@@ -183,7 +182,7 @@ public class TestAI extends Character {
 				}
 			}
 		}
-		return i;
+		return Math.abs(i);
 	}
 	
 	private void lookForNewDirection(int spots) {
@@ -282,6 +281,7 @@ public class TestAI extends Character {
 		if (map[safeRow][safeCol] != null) {
 			generateSafePlace();
 		}
+		state = 1;
 	}
 	
 }
