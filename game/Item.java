@@ -1,34 +1,41 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Item extends FieldObject {
-	
+
 	private int id;
 	private Character obtainer;
 	private Character opponent;
-	
+
 	private int duration;
 	private int maxDuration;
 	private int cooldown;
-	private boolean isInPlay;
+	private boolean inPlay;
+	private boolean queued;
+	private final static int MAX_ITEM_IDS = 2;
 
-	@Override
 	public boolean isCharacter() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
-	public Item(int given_id, int theRow, int theCol) {
+	public boolean isObstacle() {
+		return false;
+	}
+
+	public Item(int given_id) {
 		id = given_id;
-		row = theRow;
-		col = theCol;
-		
+		inPlay = false;
+		direction = 0;
+		light = new Color(0,1,0,1);
+
 		maxDuration = 5;
 	}
-	
+
 	public void itemEffect(Character char1, Character char2, int whoGot) {
-		duration = 0;
-		isInPlay = true;
-		switch (whoGot) {
+		if (inPlay) {
+			duration = 0;
+			switch (whoGot) {
 			case 1:
 				obtainer = char1;
 				opponent = char2;
@@ -37,72 +44,74 @@ public class Item extends FieldObject {
 				obtainer = char2;
 				opponent = char1;
 				break;
-		}
-		switch (id) {
+			}
+			switch (id) {
 			case 0:
-				speedUp(obtainer);
-				break;
-			case 1:
 				slowDown(opponent);
 				break;
-			case 2:
-				increaseTrailLength(obtainer);
-				break;
-			case 3:
+			case 1:
 				freeze(opponent);
 				break;
+			}
 		}
+		inPlay = false;
 	}
-	
-	public void speedUp(Character character) {
-		character.setSpeed(character.getSpeed() * 2);
-	}
-	
+
 	public void slowDown(Character character) {
-		character.setNextActionableFrame(character.getNextActionableFrame() * 2);
+		character.setNextActionableFrame(2);
 	}
-	
-	public void increaseTrailLength(Character character) {
-		character.setTrailMultiplier(2);
-	}
-	
+
 	public void freeze(Character character) {
 		character.setNextActionableFrame(-1);
 	}
-	
+
 	public void returnToNormal(Character char1, Character char2) {
-		//Return Characters to their Normal Values
+		// Return Characters to their Normal Values
 		switch (id) {
 		case 0:
-			slowDown(obtainer);
-			break;
-		case 1:
-			speedUp(opponent);
-			break;
-		case 2:
-			obtainer.setTrailMultiplier(1);
-			break;
-		case 3:
 			opponent.setNextActionableFrame(1);
 			break;
+		case 1:
+			opponent.setNextActionableFrame(1);
+			break;
+		}
+		inPlay = false;
 	}
-	}
-	
-	public void incrementDuration() {
-		duration++;
-	}
-	
-	public boolean expired() {
+
+	public boolean expired(int duration) {
 		return maxDuration > duration;
 	}
 	
+	public void addSecond() {
+		duration++;
+	}
+
 	public boolean ifInPlay() {
-		return isInPlay;
+		return inPlay;
+	}
+
+	public void activate() {
+		queued = false;
+		inPlay = true;
+	}
+	public void deactivate(Character char1, Character char2) {
+		inPlay = false;
+	}
+
+	public void queueItem() {
+		queued = true;
 	}
 	
-	public int getSpawnCooldown() {
-		return cooldown;
+	public Boolean isQueued() {
+		return queued;
 	}
-	
+
+	public Boolean isInPlay() {
+		return inPlay;
+	}
+
+	public static int getMaxID() {
+		return MAX_ITEM_IDS;
+	}
 
 }
