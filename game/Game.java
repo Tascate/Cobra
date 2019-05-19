@@ -289,6 +289,7 @@ public class Game {
 						return true;
 					}
 				}
+				character.die();
 				return true;
 			}
 		}
@@ -313,8 +314,6 @@ public class Game {
 		//Get Tail Details
 		int row = character.getTailRow();
 		int col = character.getTailCol();
-		System.out.println("Direction:" + character.tailDirection + " The row:" + character.getTailRow() + " " + col);
-		//System.out.println(row + " " + col + " " + grid[row][col] == null);
 		int direction = character.tailDirection;
 		
 		grid[row][col] = null;
