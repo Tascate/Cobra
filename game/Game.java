@@ -20,8 +20,13 @@ public class Game {
 	private Boolean ended; //check if game has ended or not
 	private int maxTrailLength;
 	
-	private Item currentItem;
-	private Boolean itemQueued;
+		private Item currentItem;
+	private Item[] itemPool;
+	private boolean itemQueued;
+	private boolean itemSpawned;
+	private int itemFrame;
+	private boolean itemInEffect;
+	private int itemSpawnTimer; //Range of 20-30 seconds randomly
 	private Random rand;
 	
 	int currentFrame;
@@ -39,6 +44,7 @@ public class Game {
 	public Game(int rows, int cols, Boolean twoPlayers) {
 		grid = new FieldObject[rows][cols];
 		rand = new Random();
+		itemSpawnTimer = rand.nextInt(10)+13;
 		paused = false;
 		ended = false;
 		itemQueued = false;
@@ -60,6 +66,11 @@ public class Game {
 			char2 = ai;
 		}
 		
+		itemPool = new Item[Item.getMaxID()];
+		for (int i = 0; i < Item.getMaxID(); i++) {
+			itemPool[i] = new Item(i);
+		}
+		
 		grid[rows - (rows * 1/8)][cols * 1/2] = char2;
 	}
 	
@@ -68,6 +79,43 @@ public class Game {
 	 * and just continue to move the player.
 	 */
 	public void progressGame() {
+		checkForOtherInput();
+		if (!paused && !ended) {
+			increaseTimer();
+			checkForGameInput();
+			timeSpecificScenarios();
+			if (itemSpawned) {
+				detectItemCollision();
+			}
+			if (itemInEffect) {
+				itemFrame++;
+				if (itemFrame > 60) {
+					itemFrame = 0;
+					currentItem.addSecond();;
+				}
+				if (currentItem.expired(1)) {
+					currentItem.deactivate(char1, char2);
+					itemInEffect = false;
+					itemQueued = false;
+					itemSpawned = false;
+				}
+			}
+			if (currentFrame % char1.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
+				moveChar(char1);
+			}
+			if (currentFrame % char2.getNextActionableFrame() == 0 && char2.nextActionableFrame != -1) {
+				if (!realOpponent) {
+					ai.runAI();
+				}
+				moveChar(char2);
+			}
+		}
+		if (ended()) {
+			endGame();
+		}
+	}
+	
+	private void increaseTimer() {
 		currentFrame++;
 		if (currentFrame > 60) {
 			currentFrame = 0;
@@ -80,21 +128,17 @@ public class Game {
 				}
 			}
 		}
-		checkForOtherInput();
-		if (!paused && !ended) {
-			checkForGameInput();
-			if (seconds % char1.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
-				moveChar(char1);
-			}
-			if (seconds % char2.getNextActionableFrame() == 0 && char1.nextActionableFrame != -1) {
-				if (!realOpponent) {
-					ai.runAI();
-				}
-				moveChar(char2);
-			}
+	}
+	
+	private void timeSpecificScenarios() {
+		if (seconds % 20 == 0 && currentFrame == 1 && seconds != 0) {
+			maxTrailLength *= 2;
 		}
-		if (ended()) {
-			endGame();
+		if (seconds % (itemSpawnTimer-7) == 0 && currentFrame == 1 && seconds != 0) {
+			queueItem();
+		}
+		if (seconds % itemSpawnTimer == 0 && currentFrame == 1 && seconds != 0) {
+			spawnItem();
 		}
 	}
 	
@@ -210,7 +254,7 @@ public class Game {
 		int col = character.getCol();
 		// System.out.print(" Collision: " + collision);
 		if (!collided(character)) {		
-			for(int i = 0; i < char1.getSpeed(); i++) {
+			for(int i = 0; i < character.getSpeed(); i++) {
 				switch (character.getDirection()) {
 				case 1:
 					grid[row][col+i] = character.leaveTrail(row, col+i);
@@ -332,38 +376,50 @@ public class Game {
 		//Find the new Tail
 		switch (direction) {
 			case 1:
-				character.setTailCol(col+1);
+				character.setTailCol(col+character.getSpeed());
+				for (int i = 0; i < character.getSpeed(); i++) {
+					grid[row][col+i] = null;
+				}
 				break;
 			case 2:
-				character.setTailRow(row+1);
+				character.setTailRow(row+character.getSpeed());
+				for (int i = 0; i < character.getSpeed(); i++) {
+					grid[row+i][col] = null;
+				}
 				break;
 			case 3:
-				character.setTailCol(col-1);
+				character.setTailCol(col-character.getSpeed());
+				for (int i = 0; i < character.getSpeed(); i++) {
+					grid[row][col-i] = null;
+				}
 				break;
 			case 4:
-				character.setTailRow(row-1);
+				character.setTailRow(row-character.getSpeed());
+				for (int i = 0; i < character.getSpeed(); i++) {
+					grid[row-i][col] = null;
+				}
 				break;
-		}
 		character.setTailDirection(grid[character.getTailRow()][character.getTailCol()].getDirection());
 		//Remove the old Tail
 		character.decrementTrailLength();
 	}
 	
 	/**
-	*Checks to see if an item is in queue
+	*Queue an item
 	*@return true if tem is queued
 	*/
-	public boolean queueItem() {
+	public void queueItem() {
 		if (!itemQueued) {
-			int row = rand.nextInt(grid.length);
-			int col = rand.nextInt(grid[0].length);
-			if (rand.nextInt(2) == 1) {
-				currentItem= new Item(rand.nextInt(4), row, col);
-				return true;
+			int row = rand.nextInt(grid.length/2 + grid.length/4);
+			int col = rand.nextInt(grid[0].length/2 +grid[0].length/4);
+			if (Math.random() < 1) {
+				currentItem = itemPool[rand.nextInt(Item.getMaxID())];
+				currentItem.setRow(row);
+				currentItem.setCol(col);
+				currentItem.queueItem();
+				itemQueued = true;
 			}
-			return false;
 		}
-		return false;
 	}
 		
 	/**
@@ -371,14 +427,34 @@ public class Game {
 	*@return true if item has been spawned
 	*/
 	public boolean spawnItem() {
-		if (grid[currentItem.getRow()][currentItem.getCol()] == null) {
+		if (grid[currentItem.getRow()][currentItem.getCol()] == null && itemSpawned == false && itemQueued == true) {
 			grid[currentItem.getRow()][currentItem.getCol()] = currentItem;
 			if (!realOpponent) {
 				ai.prioritizeItem(currentItem.getRow(), currentItem.getCol());
 			}
+			itemQueued = false;
+			itemSpawned = true;
+			currentItem.activate();
 			return true;
 		}
 		return false;
+	}
+		
+	private void detectItemCollision() {
+		int row = currentItem.getRow() - 5;
+		int col = currentItem.getCol() - 5;
+		int row2 = row+10;
+		int col2 = col+10;
+		if (row <= char1.getRow() && char1.getRow() <= row2 && col <= char1.getCol() && char1.getCol() <= col2) {
+			currentItem.itemEffect(char1, char2, 1);
+			grid[currentItem.getRow()][currentItem.getCol()] = null;
+			itemInEffect = true;
+		}
+		else if (row <= char2.getRow() && char2.getRow() <= row2 && col <= char2.getCol() && char2.getCol() <= col2) {
+			currentItem.itemEffect(char1, char2, 2);
+			grid[currentItem.getRow()][currentItem.getCol()] = null;
+			itemInEffect = true;
+		}
 	}
 	
 	/**
