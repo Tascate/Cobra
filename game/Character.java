@@ -58,35 +58,62 @@ public class Character extends FieldObject {
 		trailLength++;
 		return trailPool[direction-1];
 	}
-	
+	/**
+	*Returns the row that the tail is in
+	*@return row of tail
+	*/
 	public int getTailRow() {
 		return rowOfTail;
 	}
 	
+	/**
+	*Returns the column that the tail is in
+	*@return col of tail
+	*/
 	public int getTailCol() {
 		return colOfTail;
 	}
-	
+	/**
+	*Returns the direction that the tail is in
+	*@return direction of tail
+	*/
 	public int getTailDirection() {
 		return tailDirection;
 	}
 	
+	/**
+	*Sets the row of the tail
+	*@param row - row of tail
+	*/
 	public void setTailRow(int row) {
 		rowOfTail = row;
 	}
 	
+	/**
+	*Sets the column of the tail
+	*@param col - col of tail
+	*/
 	public void setTailCol(int col) {
 		colOfTail = col;
 	}
-	
+	/**
+	*Sets the direction of the tail
+	*@param d - direction of tail
+	*/
 	public void setTailDirection(int d) {
 		tailDirection = d;
 	}
-	
+	/**
+	*returns the length of the tail
+	*@return tail length
+	*/
 	public int getTrailLength() {
 		return trailLength;
 	}
 	
+	/**
+	*Decreases the tail length
+	*/
 	public void decrementTrailLength() {
 		trailLength--;
 	}
@@ -97,19 +124,31 @@ public class Character extends FieldObject {
 	public void die() {
 		alive = false;
 	}
-	
+	/**
+	*Sets the next actionable frame
+	*@param frame - next frame
+	*/
 	public void setNextActionableFrame(int frame) {
 		nextActionableFrame = frame;
 	}
-	
+	/**
+	*gets the next actionable frame
+	*@return next actional frame
+	*/
 	public int getNextActionableFrame() {
 		return nextActionableFrame;
 	}
-	
+	/**
+	*sets the trail multiplier
+	*@param multiplier - multiplier of tail
+	*/
 	public void setTrailMultiplier(int multiplier) {
 		trailMultiplier = multiplier;
 	}
-	
+	/**
+	*gets the multiplier of tail
+	*@return multiplier of tail
+	*/
 	public double getTrailMultiplier() {
 		return trailMultiplier;
 	}
