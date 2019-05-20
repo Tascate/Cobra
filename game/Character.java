@@ -21,9 +21,11 @@ public class Character extends FieldObject {
 	
 	/**
 	* Constructor to initialize the instance variable to the passed in values to make the character and add their features.
+	*@param theRow - row of character
+	*@param theColumn - column of character
 	*@param s - speed of character
 	*@param c - color of the character
-	*@param a - angle for where the character is changing directions, whether it's going up, down, left, or right.
+	*@param d - direction of character
 	*/
 	public Character(int theRow, int theColumn, int s, Color c, int d) {
 		row = theRow;
@@ -46,6 +48,8 @@ public class Character extends FieldObject {
 	
 	/**
 	 * Trail method to return the trail that is left behind from the character when the character is currently moving.
+	 *@param row - row to leave trail
+	 *@param col - column to leave trail
 	 *@return the trail left behind from the character along with their color and angle at which they are moving.
 	 */
 	public Trail leaveTrail(int row, int col) {
@@ -133,7 +137,7 @@ public class Character extends FieldObject {
 	}
 	/**
 	*gets the next actionable frame
-	*@return next actional frame
+	*@return next actionable frame
 	*/
 	public int getNextActionableFrame() {
 		return nextActionableFrame;
