@@ -1,9 +1,12 @@
-# To-Do 
-- Properly end the game (End Screen, stop progressGame())
-- Properly restart the game
-- Program AI
-- Create menu screen
-- Add in power-up items (increase trailing light length, faster player?)
+# Mini Side Project of a Game with Inspiration from Tron & Snake
+  Defeat your opponent by forcing the opponent to crash into you or the wall.
+  Acquire power-ups to help you in this goal!
+  This game works best as 2-player mode then vs CPU.
+  Gameplay is fully functional
+  Most items are implemented
+  Rough AI that may be unforgivable or dies without question at times (Can Revise this AI to be better)
+  No menus to select two-player (have to force this in code)
+  
 
 # Code Overview:
 ## Cobra.java
