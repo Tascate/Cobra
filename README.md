@@ -1,17 +1,17 @@
-# Mini Side Project of a Game, Inspiration from Tron & Snake
+# Simple Game Project made for fun, 
+# A mesh of Tron & Snake
  - Defeat your opponent by forcing the opponent to crash into you or the wall.
  - Acquire power-ups to help you in this goal!
- - This game works best as 2-player mode then vs CPU.
+ - 2-player as well as CPU mode
  - Gameplay is fully functional
--  Most items are implemented
--  Rough AI that may be unforgivable or dies without question at times (Can Revise this AI to be better)
--  No menus to select two-player (have to force this in code)
+-  Item pickups that empower you
+-  Simple AI with different states
   
 
 # Code Overview:
 ## Cobra.java
-- RENDER THE GAME
-- PACE THE GAME
+- Responsible for the Game State
+- Renders the game
 - Grid Instance that Objects are moving along
 - FieldObject Two-Dimensional Array
 - Contains either a Trail or Character
