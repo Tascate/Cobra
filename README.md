@@ -6,6 +6,7 @@
  - Gameplay is fully functional
 -  Item pickups that empower you
 -  Simple AI with different states
+-  Uses libgdx for drawing the game
   
 
 # Code Overview:
