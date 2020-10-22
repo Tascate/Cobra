@@ -1,4 +1,4 @@
-# Simple Game Project made for fun, 
+# Simple Game Project made for fun
 # A mesh of Tron & Snake
  - Defeat your opponent by forcing the opponent to crash into you or the wall.
  - Acquire power-ups to help you in this goal!
